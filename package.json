@@ -1,11 +1,14 @@
 {
 	"name": "nelio-maps",
 	"version": "1.0.0",
+	"engines": {
+		"node": ">=20"
+	},
 	"description": "",
 	"main": "dist/index.js",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/davilera/nelio-maps.git"
+		"url": "git+https://github.com/Nelio-Software/nelio-maps.git"
 	},
 	"keywords": [
 		"google maps",
@@ -15,36 +18,39 @@
 	"author": "Nelio Software",
 	"license": "GPL-3.0-or-later",
 	"bugs": {
-		"url": "https://github.com/davilera/nelio-maps/issues"
+		"url": "https://github.com/Nelio-Software/nelio-maps/issues"
 	},
-	"homepage": "https://github.com/davilera/nelio-maps#readme",
+	"homepage": "https://github.com/Nelio-Software/nelio-maps#readme",
+	"prettier": "@wordpress/prettier-config",
 	"scripts": {
 		"build": "wp-scripts build",
-		"check-engines": "wp-scripts check-engines",
-		"check-licenses": "wp-scripts check-licenses",
+		"format": "wp-scripts format assets/src",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
+		"lint:php": "composer lint",
 		"lint:pkg-json": "wp-scripts lint-pkg-json",
-		"start": "wp-scripts start",
-		"test:e2e": "wp-scripts test-e2e",
-		"test:unit": "wp-scripts test-unit-js"
+		"start": "wp-scripts start"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^5.0.0",
-		"autoprefixer": "^9.6.1",
-		"babel-eslint": "^10.0.3",
-		"base64-inline-loader": "^1.1.1",
-		"classnames": "^2.2.6",
+		"@svgr/webpack": "^8.1.0",
+		"@typescript-eslint/eslint-plugin": "^8.27.0",
+		"@typescript-eslint/parser": "^8.27.0",
+		"@typescript-eslint/utils": "^8.27.0",
+		"@wordpress/blocks": "^13.0.3",
+		"@wordpress/components": "^28.0.3",
+		"@wordpress/compose": "^7.0.1",
+		"@wordpress/editor": "^14.0.8",
+		"@wordpress/element": "^6.0.1",
+		"@wordpress/i18n": "^5.0.1",
+		"@wordpress/prettier-config": "*",
+		"@wordpress/scripts": "^30.21.0",
+		"base64-inline-loader": "^2.0.1",
+		"clsx": "^2.1.1",
 		"css-loader": "^3.2.0",
-		"eslint": "^6.5.0",
-		"eslint-plugin-react": "^7.14.3",
-		"mini-css-extract-plugin": "^0.8.0",
-		"node-sass": "^4.12.0",
-		"postcss-loader": "^3.0.0",
+		"fork-ts-checker-webpack-plugin": "^9.0.2",
+		"mini-css-extract-plugin": "^2.9.2",
+		"prettier": "npm:wp-prettier@latest",
 		"react-google-maps": "^9.4.5",
-		"sass-loader": "^8.0.0",
-		"svg-react-loader": "^0.4.6",
-		"webpack": "^4.41.0",
-		"webpack-rtl-plugin": "^2.0.0"
+		"typescript": "^5.8.2"
 	}
 }

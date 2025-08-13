@@ -1,42 +1,41 @@
 /**
  * External dependencies
  */
-const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
-const WebpackRTLPlugin = require( 'webpack-rtl-plugin' );
 const path = require( 'path' );
+const ForkTsCheckerWebpackPlugin = require( 'fork-ts-checker-webpack-plugin' );
 
 /**
  * WordPress dependencies
  */
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
-const isProduction = defaultConfig.mode === 'production';
 
+// ========
+// SETTINGS
+// ========
 const config = {
 	...defaultConfig,
 	plugins: [
-		...defaultConfig.plugins,
-		new WebpackRTLPlugin( {
-			suffix: '-rtl',
-			minify: isProduction ? { safe: true } : false,
+		new ForkTsCheckerWebpackPlugin( {
+			typescript: {
+				memoryLimit: 8192,
+			},
 		} ),
-		new MiniCssExtractPlugin(),
-	],
+		...defaultConfig.plugins.filter(
+			( p ) => 'RtlCssPlugin' !== p.constructor.name
+		),
+	].filter( /* if plugin exists */ ( x ) => !! x ),
 	module: {
 		...defaultConfig.module,
 		rules: [
 			...defaultConfig.module.rules,
-			{
-				test: /.svg$/,
-				issuer: /\.js$/,
-				use: [
-					{
-						loader: 'svg-react-loader',
-					},
-				],
-			},
+			// {
+			// 	test: /\.tsx?$/,
+			// 	loader: 'ts-loader',
+			// 	exclude: /node_modules/,
+			// },
 			{
 				test: /\.(png|jpe?g|gif)$/,
-				issuer: /\.js$/,
+				issuer: /\.tsx?$/,
 				use: [
 					{
 						loader: 'file-loader',
@@ -48,36 +47,22 @@ const config = {
 					},
 				],
 			},
-			{
-				test: /\.s?css$/,
-				use: [
-					{
-						loader: MiniCssExtractPlugin.loader,
-						options: {
-							hmr: ! isProduction,
-						},
-					},
-					'css-loader',
-					'postcss-loader',
-					'sass-loader',
-				],
-			},
 		],
+	},
+	watchOptions: {
+		ignored: /node_modules|^((?!(packages|assets.src)).)*$/,
 	},
 };
 
 module.exports = [
-
 	{
 		...config,
 		entry: {
-			blocks: './packages/blocks/index.js',
-			public: './assets/src/js/public/public.js',
+			blocks: './packages/blocks/index.ts',
+			public: './assets/src/js/public/public.ts',
 		},
 		output: {
 			path: path.resolve( __dirname, './assets/dist/' ),
-		}
+		},
 	},
-
 ];
-

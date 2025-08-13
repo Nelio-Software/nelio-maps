@@ -1,23 +1,17 @@
 /**
  * WordPress dependencies
  */
-import {
-	registerBlockType,
-	registerBlockStyle,
-} from '@wordpress/blocks';
+import { registerBlockType, registerBlockStyle } from '@wordpress/blocks';
 
 /**
  * Internal dependencies
  */
 import * as map from './google-map';
 
-[
-	map,
-].forEach( ( block ) => {
-
+[ map ].forEach( ( block ) => {
 	if ( ! block ) {
 		return;
-	}//end if
+	} //end if
 
 	// Register the block in the editor.
 	const { name, settings } = block;
@@ -26,5 +20,4 @@ import * as map from './google-map';
 	// Register new block styles.
 	const styles = block.styles || [];
 	styles.forEach( ( style ) => registerBlockStyle( name, style ) );
-
 } );

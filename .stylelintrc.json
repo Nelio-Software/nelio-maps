@@ -1,0 +1,10 @@
+{
+	"extends": "@wordpress/stylelint-config/scss",
+	"ignoreFiles": [
+		"**/*.ts",
+		"**/*.tsx"
+	],
+	"rules": {
+		"selector-class-pattern": null
+	}
+}

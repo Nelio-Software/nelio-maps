@@ -1,10 +1,5 @@
-/**
- * Editor Styles
- */
 #editor {
-
 	.nelio-maps-google-map.is-api-key-missing {
-
 		background: #eee;
 		position: relative;
 		text-align: center;
@@ -17,9 +12,8 @@
 		}
 
 		.nelio-maps-google-map-placeholder-key {
-
 			background: white;
-			box-shadow: 2px 2px 5px rgba( 0, 0, 0, 0.2 );
+			box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 			display: inline-block;
 			margin: 0 1em 1em;
 			padding: 1em;
@@ -33,21 +27,17 @@
 			p:first-child {
 				font-weight: bold;
 			}
-
 		}
-
 	}
 
 	.nelio-maps-address-search-dropdown {
 		box-sizing: border-box;
 		margin: 8px auto;
-		width: calc( 100% - 16px );
+		width: calc(100% - 16px);
 	}
 
 	section.nelio-maps-google-map {
-
 		.address {
-
 			min-width: 30%;
 
 			p.mce-content-body,
@@ -56,11 +46,8 @@
 				font-size: 0.9rem !important;
 				line-height: 1.2 !important;
 			}
-
 		}
-
 	}
-
 }
 
 /* Google Location Search Dropdown */

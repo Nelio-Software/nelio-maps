@@ -1,0 +1,46 @@
+{
+	"compilerOptions": {
+		"baseUrl": "./",
+		"jsx": "react-jsx",
+		"lib": [
+			"es2021",
+			"dom"
+		],
+		"module": "esnext",
+		"moduleResolution": "node",
+		"outDir": "dist",
+		"allowUnusedLabels": false,
+		"alwaysStrict": true,
+		"emitDecoratorMetadata": true,
+		"esModuleInterop": true,
+		"exactOptionalPropertyTypes": false,
+		"experimentalDecorators": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"pretty": true,
+		"removeComments": false,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strictFunctionTypes": true,
+		"strictNullChecks": true,
+		"target": "es2015",
+		"typeRoots": [
+			"node_modules/@types",
+			"types"
+		],
+	},
+	"include": [
+		"assets/src",
+		"packages",
+		"types"
+	],
+	"exclude": [
+		"node_modules"
+	],
+	"compileOnSave": false,
+	"buildOnSave": false
+}

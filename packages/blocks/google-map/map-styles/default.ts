@@ -9,10 +9,8 @@ import { _x } from '@wordpress/i18n';
 import image from './default.png';
 
 export default {
-
 	image,
-	value: 'default',
+	value: 'default' as const,
 	label: _x( 'Default', 'text', 'nelio-maps' ),
 	json: {},
-
 };
