@@ -14,7 +14,7 @@ import {
 /**
  * Internal dependencies
  */
-import { MapStyles } from './map-styles/map-styles';
+import { MapStyles } from './map-styles';
 import { AddressSearch } from './address-search';
 import { EditProps } from './types';
 import { useGoogleMapsApiKey, useGoogleMapsUrl } from './hooks';

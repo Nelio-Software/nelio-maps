@@ -50,7 +50,7 @@ const config = {
 		],
 	},
 	watchOptions: {
-		ignored: /node_modules|^((?!(packages|assets.src)).)*$/,
+		ignored: /node_modules|^((?!(assets.src)).)*$/,
 	},
 };
 
@@ -58,8 +58,8 @@ module.exports = [
 	{
 		...config,
 		entry: {
-			blocks: './packages/blocks/index.ts',
-			public: './assets/src/js/public/public.ts',
+			blocks: './assets/src/blocks/index.ts',
+			public: './assets/src/blocks/google-map/view.ts',
 		},
 		output: {
 			path: path.resolve( __dirname, './assets/dist/' ),

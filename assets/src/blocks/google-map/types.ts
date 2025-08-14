@@ -1,7 +1,12 @@
+/**
+ * WordPress dependencies
+ */
+import { BlockAlignmentToolbar } from '@wordpress/block-editor';
+
 export type Attributes = {
 	// Map options.
 	readonly isDraggable: boolean;
-	readonly blockAlignment?: 'center' | 'wide' | 'full';
+	readonly blockAlignment?: BlockAlignmentToolbar.Control;
 	readonly height: number;
 
 	// Map location.
@@ -38,5 +43,6 @@ export type MapStyle< T extends string > = {
 	readonly value: T;
 	readonly label: string;
 	readonly image: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	readonly json: any;
 };

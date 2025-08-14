@@ -13,7 +13,7 @@ import { clsx } from 'clsx';
  * Internal dependencies
  */
 import './editor.scss';
-import type { MapStyle } from '../../blocks/google-map/types';
+import type { MapStyle } from '../../types';
 
 export type ImagePickerProps< TValue extends string > = {
 	readonly label: string;

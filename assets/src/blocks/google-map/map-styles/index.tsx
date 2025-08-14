@@ -7,7 +7,7 @@ import { TextareaControl } from '@wordpress/components';
 /**
  * Internal dependencies
  */
-import { ImagePicker } from '../../../components/image-picker/image-picker';
+import { ImagePicker } from './image-picker';
 
 import defaultMapStyle from './default';
 import darkMapStyle from './dark';
