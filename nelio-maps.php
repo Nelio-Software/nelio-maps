@@ -39,8 +39,6 @@ class Nelio_Maps {
 
 	public $plugin_path;
 	public $plugin_url;
-	public $plugin_name;
-	public $plugin_version;
 
 	public static function instance() {
 
@@ -66,22 +64,28 @@ class Nelio_Maps {
 
 	public function init_hooks() {
 
-		add_action( 'admin_init', [ $this, 'admin_init' ] );
-
 		if ( ! function_exists( 'register_block_type' ) ) {
 			return;
 		}//end if
 
+		add_action( 'init', [ $this, 'register_block_types' ] );
 		add_action( 'init', [ $this, 'register_google_maps_api_key_option' ] );
 		add_filter( 'block_categories', [ $this, 'add_extra_category' ], 99 );
-		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_block_editor_assets' ], 9 );
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_block_assets' ] );
 
 		if ( is_admin() ) {
 			require_once $this->plugin_path . '/options.php';
 		}//end if
 
 	}//end init_hooks()
+
+	public function register_block_types() {
+		$blocks = [ 'google-map' ];
+		foreach ( $blocks as $block ) {
+			register_block_type(
+				$this->plugin_path . "/assets/dist/blocks/{$block}"
+			);
+		}//end foreach
+	}//end register_block_types()
 
 	public function add_extra_category( $categories ) {
 
@@ -100,84 +104,6 @@ class Nelio_Maps {
 		);
 
 	}//end add_extra_category()
-
-	public function enqueue_block_editor_assets() {
-
-		$script_meta = require $this->plugin_path . '/assets/dist/blocks.asset.php';
-		wp_enqueue_script(
-			'nelio-maps-blocks',
-			untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/assets/dist/blocks.js',
-			$script_meta['dependencies'],
-			$script_meta['version'],
-			true
-		);
-
-		if ( function_exists( 'wp_set_script_translations' ) ) {
-			wp_set_script_translations( 'nelio-maps-blocks', 'nelio-maps' );
-		}//end if
-
-		wp_enqueue_style(
-			'nelio-maps-blocks',
-			untrailingslashit( plugin_dir_url( __FILE__ ) ) . '/assets/dist/blocks.css',
-			[],
-			$this->plugin_version
-		);
-
-		wp_localize_script(
-			'nelio-maps-blocks',
-			'NelioMaps',
-			array(
-				'googleMapsApiKey' => get_option( 'nelio_maps_api_key_option', '' ),
-				'optionsPageUrl'   => admin_url( 'options-general.php?page=nelio-maps' ),
-			)
-		);
-
-	}//end enqueue_block_editor_assets()
-
-	public function enqueue_block_assets() {
-
-		wp_register_script(
-			'google-maps',
-			add_query_arg(
-				array(
-					'key'       => get_option( 'nelio_maps_api_key_option', '' ),
-					'libraries' => 'geometry,drawing,places',
-				),
-				'https://maps.googleapis.com/maps/api/js'
-			),
-			[],
-			$this->plugin_version,
-			true
-		);
-
-		wp_enqueue_style(
-			'nelio-maps-gutenberg',
-			$this->plugin_url . '/assets/dist/blocks.css',
-			[],
-			$this->plugin_version
-		);
-
-		$script_meta = require $this->plugin_path . '/assets/dist/public.asset.php';
-		wp_enqueue_script(
-			'nelio-maps',
-			$this->plugin_url . '/assets/dist/public.js',
-			array_merge( $script_meta['dependencies'], [ 'google-maps' ] ),
-			$script_meta['version'],
-			true
-		);
-
-	}//end enqueue_block_assets()
-
-	public function admin_init() {
-
-		$data = get_file_data( __FILE__, [ 'Plugin Name', 'Version' ], 'plugin' );
-
-		$this->plugin_name           = $data[0];
-		$this->plugin_version        = $data[1];
-		$this->plugin_slug           = plugin_basename( __FILE__, '.php' );
-		$this->plugin_name_sanitized = basename( __FILE__, '.php' );
-
-	}//end admin_init()
 
 	public function register_google_maps_api_key_option() {
 
