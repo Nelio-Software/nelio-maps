@@ -18,12 +18,12 @@ const BLOCK_DESCRIPTION = _x(
 /**
  * Internal dependencies
  */
-import './styles/style.scss';
-import './styles/editor.scss';
+import './style.scss';
+import './editor.scss';
 
 import ElementIcon from './icon.svg';
-import GoogleMapEdit from './edit';
-import GoogleMapSave from './save';
+import { GoogleMapEdit } from './edit';
+import { GoogleMapSave } from './save';
 import attributes from './attributes';
 
 export const name = BLOCK_NAME;

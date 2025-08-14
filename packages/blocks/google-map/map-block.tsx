@@ -2,13 +2,9 @@
  * External dependencies
  */
 import { compose, withProps, withHandlers } from 'recompose';
-import {
-	withScriptjs,
-	withGoogleMap,
-	GoogleMap,
-} from 'react-google-maps';
+import { withScriptjs, withGoogleMap, GoogleMap } from 'react-google-maps';
 
-const MapBlock = compose(
+export const MapBlock = compose(
 	withProps( {
 		loadingElement: <div style={ { height: '100%' } } />,
 		mapElement: <div style={ { height: '100%' } } />,
@@ -26,24 +22,20 @@ const MapBlock = compose(
 				props.onZoomChanged( refs.map.getZoom() );
 			},
 			onCenterChanged: ( props ) => () => {
-
 				const center = refs.map.getCenter();
 
 				const lat = center.lat();
 				const lng = center.lng();
 				props.onCenterChanged( `${ lat }`, `${ lng }` );
-
 			},
 		};
 	} ),
 	withScriptjs,
 	withGoogleMap
 )( ( props ) => {
-
 	const { children } = props;
 
 	return (
-
 		<GoogleMap
 			ref={ props.onMapMounted }
 			zoom={ props.zoom }
@@ -55,12 +47,7 @@ const MapBlock = compose(
 			onZoomChanged={ props.onZoomChanged }
 			onCenterChanged={ props.onCenterChanged }
 		>
-
 			{ children }
-
 		</GoogleMap>
 	);
-
 } );
-
-export default MapBlock;

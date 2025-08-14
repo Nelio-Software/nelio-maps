@@ -12,7 +12,7 @@ import { clsx } from 'clsx';
 /**
  * Internal dependencies
  */
-import './styles/editor.scss';
+import './editor.scss';
 import type { MapStyle } from '../../blocks/google-map/types';
 
 export type ImagePickerProps< TValue extends string > = {

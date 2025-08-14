@@ -1,25 +1,20 @@
 /**
  * WordPress dependencies
  */
-import {
-	TextControl,
-} from '@wordpress/components';
+import { TextControl } from '@wordpress/components';
 
 /**
  * External dependencies
  */
 import { withScriptjs } from 'react-google-maps';
-import {
-	compose,
-	withState,
-	withProps,
-	withHandlers,
-} from 'recompose';
+import { compose, withState, withProps, withHandlers } from 'recompose';
 
-const { StandaloneSearchBox } = require( 'react-google-maps/lib/components/places/StandaloneSearchBox' );
+const {
+	StandaloneSearchBox,
+} = require( 'react-google-maps/lib/components/places/StandaloneSearchBox' );
 
-const AddressSearch = compose(
-
+// TODO DAVID. Improve this component and remove cast.
+export const AddressSearch = compose(
 	withState( 'value', 'setValue', ( props ) => {
 		return props.value;
 	} ),
@@ -35,7 +30,6 @@ const AddressSearch = compose(
 		};
 
 		return {
-
 			onSearchBoxMounted: () => ( ref ) => {
 				refs.searchBox = ref;
 			},
@@ -45,22 +39,17 @@ const AddressSearch = compose(
 
 				if ( ! props.onChange || ! places || ! places[ 0 ] ) {
 					return;
-				}//end if
+				} //end if
 
 				const { location } = places[ 0 ].geometry;
 				props.onChange( `${ location.lat() }`, `${ location.lng() }` );
 				props.setValue( places[ 0 ].formatted_address );
-
 			},
-
 		};
-
 	} ),
 
-	withScriptjs,
-
+	withScriptjs
 )( ( props ) => {
-
 	const {
 		bounds,
 		className,
@@ -73,10 +62,7 @@ const AddressSearch = compose(
 	} = props;
 
 	return (
-		<div
-			data-standalone-searchbox=""
-			className={ className }
-		>
+		<div data-standalone-searchbox="" className={ className }>
 			<StandaloneSearchBox
 				ref={ onSearchBoxMounted }
 				bounds={ bounds }
@@ -91,7 +77,9 @@ const AddressSearch = compose(
 			</StandaloneSearchBox>
 		</div>
 	);
-
-} );
-
-export default AddressSearch;
+} ) as ( props: {
+	readonly className?: string;
+	readonly googleMapURL: string;
+	readonly placeholder?: string;
+	readonly onChange: ( lat: string, lng: string ) => void;
+} ) => JSX.Element;
