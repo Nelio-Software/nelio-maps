@@ -92,11 +92,12 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 							defaultCenter={ { lat, lng } }
 							defaultOptions={ options }
 							onZoomChanged={ debounce(
-								( value ) => setAttributes( { zoom: value } ),
+								( value: number ) =>
+									setAttributes( { zoom: value } ),
 								500
 							) }
 							onCenterChanged={ debounce(
-								( _lat, _lng ) =>
+								( _lat: string, _lng: string ) =>
 									setAttributes( {
 										lat: _lat,
 										lng: _lng,
@@ -183,7 +184,7 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 function safeParse( json: string ) {
 	try {
 		return JSON.parse( json );
-	} catch ( e ) {
+	} catch ( _ ) {
 		return [];
 	} //end try
 } //end safeParse()

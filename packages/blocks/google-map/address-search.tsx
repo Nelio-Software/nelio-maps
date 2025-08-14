@@ -1,3 +1,7 @@
+// @ts-nocheck
+/* eslint-disable */
+// TODO DAVID. Improve this component and remove cast.
+
 /**
  * WordPress dependencies
  */
@@ -6,14 +10,10 @@ import { TextControl } from '@wordpress/components';
 /**
  * External dependencies
  */
-import { withScriptjs } from 'react-google-maps';
 import { compose, withState, withProps, withHandlers } from 'recompose';
+import { withScriptjs } from 'react-google-maps';
+import { StandaloneSearchBox } from 'react-google-maps/lib/components/places/StandaloneSearchBox';
 
-const {
-	StandaloneSearchBox,
-} = require( 'react-google-maps/lib/components/places/StandaloneSearchBox' );
-
-// TODO DAVID. Improve this component and remove cast.
 export const AddressSearch = compose(
 	withState( 'value', 'setValue', ( props ) => {
 		return props.value;

@@ -1,3 +1,7 @@
+// @ts-nocheck
+/* eslint-disable */
+// TODO DAVID. Maybe improve types at some point.
+
 /**
  * External dependencies
  */
@@ -50,4 +54,18 @@ export const MapBlock = compose(
 			{ children }
 		</GoogleMap>
 	);
-} );
+} ) as ( props: {
+	readonly googleMapURL: string;
+	readonly loadingElement: JSX.Element;
+	readonly mapElement: JSX.Element;
+	readonly containerElement: JSX.Element;
+	readonly zoom: number;
+	readonly center: { readonly lat: number; readonly lng: number };
+	readonly options: Record< string, any >;
+	readonly defaultZoom: number;
+	readonly defaultCenter: { readonly lat: string; readonly lng: string };
+	readonly defaultOptions: Record< string, any >;
+	readonly onZoomChanged: ( zoom: number ) => void;
+	readonly onCenterChanged: ( lat: string, lng: string ) => void;
+	readonly children: JSX.Element | ReadonlyArray< JSX.Element >;
+} ) => JSX.Element;

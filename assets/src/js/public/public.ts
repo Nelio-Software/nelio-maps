@@ -1,4 +1,4 @@
-const { LatLng, Marker, Map } = window.google.maps;
+init();
 
 function init() {
 	[
@@ -8,22 +8,37 @@ function init() {
 	].map( ( el ) => initGoogleMap( el ) );
 } //end init()
 
+// HELPERS
+
 function initGoogleMap( el: HTMLElement ) {
+	if ( ! hasGoogleMaps( window ) ) {
+		return;
+	} //end if
+
 	el.classList.add( 'nelio-maps-ready' );
 
-	const marker = extractMarkerPositionIfAny( el );
-	const map = new Map( el, extractMapOptions( el ) );
+	const options = extractMapOptions( el );
+	if ( ! options ) {
+		return;
+	} //end if
 
+	const map = new window.google.maps.Map( el, options );
+
+	const marker = extractMarkerPositionIfAny( el );
 	if ( marker ) {
-		new Marker( {
+		new window.google.maps.Marker( {
 			map,
 			clickable: false,
-			position: new LatLng( marker.lat, marker.lng ),
+			position: new window.google.maps.LatLng( marker.lat, marker.lng ),
 		} );
 	} //end if
 } //end initGoogleMap()
 
 function extractMapOptions( el: HTMLElement ) {
+	if ( ! hasGoogleMaps( window ) ) {
+		return;
+	} //end if
+
 	const lat = parseFloat( el.getAttribute( 'data-lat' ) || '' );
 	const lng = parseFloat( el.getAttribute( 'data-lng' ) || '' );
 
@@ -35,19 +50,19 @@ function extractMapOptions( el: HTMLElement ) {
 	const showFullscreenButton =
 		'true' === el.getAttribute( 'data-show-fullscreen-button' );
 
-	let styles = '';
+	let styles: unknown = [];
 	try {
 		styles = JSON.parse( el.getAttribute( 'data-styles' ) || '' );
-	} catch ( e ) {}
+	} catch ( _ ) {}
 
 	return {
-		center: new LatLng( lat, lng ),
+		center: new window.google.maps.LatLng( lat, lng ),
 		draggableCursor: ! isDraggable ? 'default' : undefined,
 		fullscreenControl: showFullscreenButton,
 		gestureHandling: isDraggable ? 'cooperative' : 'none',
 		mapTypeControl: showMapTypeButton,
 		streetViewControl: false,
-		styles: styles,
+		styles,
 		zoom: parseInt( el.getAttribute( 'data-zoom' ) || '', 10 ),
 		zoomControl: showZoomButtons,
 	};
@@ -68,4 +83,23 @@ function extractMarkerPositionIfAny( el: HTMLElement ) {
 	return { lat, lng };
 } //end extractMarkerPositionIfAny()
 
-init();
+function hasGoogleMaps< T >( win: T ): win is T & {
+	readonly google: {
+		readonly maps: {
+			readonly LatLng: new ( lat: unknown, lng: unknown ) => void;
+			readonly Marker: new ( opts: unknown ) => void;
+			readonly Map: new ( el: HTMLElement, opts: unknown ) => void;
+		};
+	};
+} {
+	return (
+		!! win &&
+		'object' === typeof win &&
+		'google' in win &&
+		!! win.google &&
+		'object' === typeof win.google &&
+		'maps' in win.google &&
+		!! win.google.maps &&
+		'object' === typeof win.google.maps
+	);
+} //end hasGoogleMaps()
