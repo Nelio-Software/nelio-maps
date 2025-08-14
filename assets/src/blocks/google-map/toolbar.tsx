@@ -36,7 +36,9 @@ export const ToolbarControls = ( {
 	const googleMapsUrl = useGoogleMapsUrl();
 	return (
 		<div { ...blockProps }>
+			{ /* @ts-expect-error BlockControls should work… */ }
 			<BlockControls>
+				{ /* @ts-expect-error BlockAlignmentToolbar should work… */ }
 				<BlockAlignmentToolbar
 					value={ blockAlignment }
 					controls={ [ 'center', 'wide', 'full' ] }

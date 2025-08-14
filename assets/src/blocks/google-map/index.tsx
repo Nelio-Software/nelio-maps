@@ -1,51 +1,24 @@
 /**
  * WordPress dependencies
  */
-import { _x } from '@wordpress/i18n';
-
-/* =================================================================== */
-/* =================================================================== */
-const BLOCK_NAME = 'nelio-maps/google-map';
-const BLOCK_TITLE = _x( 'Google Map', 'text', 'nelio-maps' );
-const BLOCK_DESCRIPTION = _x(
-	'Add and customize a beautiful Google Map with an optional marker.',
-	'user',
-	'nelio-maps'
-);
-/* =================================================================== */
-/* =================================================================== */
+import { registerBlockType } from '@wordpress/blocks';
 
 /**
  * Internal dependencies
  */
+import metadata from './block.json';
 import './style.scss';
-import './editor.scss';
 
 import ElementIcon from './icon.svg';
 import { GoogleMapEdit } from './edit';
 import { GoogleMapSave } from './save';
-import attributes from './attributes';
 
-export const name = BLOCK_NAME;
-export const settings = {
-	title: BLOCK_TITLE,
-	description: BLOCK_DESCRIPTION,
+// @ts-expect-error I don’t know how to properly set metadata’s type
+registerBlockType( metadata, {
 	icon: <ElementIcon />,
-	category: 'extra',
-	keywords: [
-		_x( 'Location', 'text', 'nelio-maps' ),
-		_x( 'Geolocalization', 'text', 'nelio-maps' ),
-	],
-
-	supports: {
-		html: false,
-		className: false,
-	},
-
-	getEditWrapperProps: ( { blockAlignment }: { blockAlignment: string } ) =>
-		blockAlignment ? { 'data-align': blockAlignment } : null,
-
-	attributes,
 	edit: GoogleMapEdit,
 	save: GoogleMapSave,
-};
+	getEditWrapperProps: ( { blockAlignment } ) =>
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		blockAlignment ? { 'data-align': blockAlignment } : null,
+} );

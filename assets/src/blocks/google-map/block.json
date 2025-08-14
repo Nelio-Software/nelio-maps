@@ -1,0 +1,99 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "nelio-maps/google-map",
+	"title": "Google Map",
+	"category": "extra",
+	"icon": "none",
+	"description": "Add and customize a beautiful Google Map with an optional marker.",
+	"keywords": [ "Location", "Geolocalization" ],
+	"version": "1.0.0",
+	"textdomain": "nelio-maps",
+	"attributes": {
+		"isDraggable": {
+			"type": "boolean",
+			"default": false
+		},
+		"blockAlignment": {
+			"type": "string",
+			"default": "full"
+		},
+		"height": {
+			"type": "number",
+			"default": 30
+		},
+
+		"lat": {
+			"type": "string",
+			"source": "attribute",
+			"selector": ".nelio-maps-google-map-wrapper",
+			"attribute": "data-lat",
+			"default": "41.3947688"
+		},
+		"lng": {
+			"type": "string",
+			"source": "attribute",
+			"selector": ".nelio-maps-google-map-wrapper",
+			"attribute": "data-lng",
+			"default": "2.0787284"
+		},
+		"zoom": {
+			"type": "number",
+			"default": 8
+		},
+
+		"style": {
+			"type": "string",
+			"default": "default"
+		},
+		"customStyle": {
+			"type": "string",
+			"source": "attribute",
+			"selector": ".nelio-maps-google-map-wrapper",
+			"attribute": "data-styles",
+			"default": ""
+		},
+
+		"areZoomButtonsVisible": {
+			"type": "boolean",
+			"default": false
+		},
+		"isMapTypeButtonVisible": {
+			"type": "boolean",
+			"default": false
+		},
+		"isFullScreenButtonVisible": {
+			"type": "boolean",
+			"default": false
+		},
+
+		"isMarkerVisible": {
+			"type": "boolean",
+			"default": false
+		},
+		"marker": {
+			"type": "object",
+			"default": {
+				"lat": "41.3947688",
+				"lng": "2.0787284"
+			}
+		},
+		"address": {
+			"type": "string",
+			"source": "html",
+			"selector": ".address",
+			"default": ""
+		},
+		"addressAlignment": {
+			"type": "string",
+			"default": "right"
+		}
+	},
+	"supports": {
+		"html": false,
+		"className": true
+	},
+	"viewScript": "file:view.js",
+	"editorScript": "file:index.js",
+	"style": "file:style-index.css"
+}
