@@ -93,7 +93,7 @@
 		"html": false,
 		"className": true
 	},
-	"viewScript": "file:view.js",
+	"viewScript": [ "nelio-maps-google-map", "file:view.js" ],
 	"style": "file:style-index.css",
 	"editorScript": "file:index.js",
 	"editorStyle": "file:index.css"

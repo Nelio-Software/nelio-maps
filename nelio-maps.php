@@ -6,7 +6,7 @@
  * Plugin Name:       Nelio Maps
  * Plugin URI:        https://neliosoftware.com
  * Description:       Simple and beautiful Google Maps block for WordPress.
- * Version:           2.0.0beta1
+ * Version:           2.0.0beta2
  *
  * Author:            Nelio Software
  * Author URI:        http://neliosoftware.com
@@ -72,7 +72,8 @@ class Nelio_Maps {
 		add_action( 'init', array( $this, 'register_block_types' ) );
 		add_action( 'init', array( $this, 'register_google_maps_api_key_option' ) );
 		add_filter( 'block_categories_all', array( $this, 'add_extra_category' ), 99 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'register_script_dependencies' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'register_script_dependencies' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_script_dependencies' ) );
 
 		if ( is_admin() ) {
 			require_once $this->plugin_path . '/options.php';
@@ -89,6 +90,23 @@ class Nelio_Maps {
 	}//end register_block_types()
 
 	public function register_script_dependencies() {
+		$plugin_version = get_file_data( __FILE__, array( 'Version' ), 'plugin' )[0];
+		wp_register_script(
+			'nelio-maps-google-map',
+			add_query_arg(
+				array(
+					'key'       => get_option( 'nelio_maps_api_key_option', '' ),
+					'libraries' => 'geometry,drawing,places',
+				),
+				'https://maps.googleapis.com/maps/api/js'
+			),
+			array(),
+			$plugin_version,
+			true
+		);
+	}//end register_script_dependencies()
+
+	public function register_admin_script_dependencies() {
 		$settings = array(
 			'googleMapsApiKey' => get_option( 'nelio_maps_api_key_option', '' ),
 			'optionsPageUrl'   => admin_url( 'options-general.php?page=nelio-maps' ),
@@ -99,7 +117,7 @@ class Nelio_Maps {
 			sprintf( 'NelioMaps = %s', wp_json_encode( $settings ) ),
 			'before'
 		);
-	}//end register_script_dependencies()
+	}//end register_admin_script_dependencies()
 
 	public function add_extra_category( $categories ) {
 

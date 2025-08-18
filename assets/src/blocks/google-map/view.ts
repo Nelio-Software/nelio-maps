@@ -1,14 +1,30 @@
-init();
-
-function init() {
+domReady( () => {
 	[
 		...document.querySelectorAll< HTMLElement >(
 			'.nelio-maps-google-map-wrapper:not( .nelio-maps-ready )'
 		),
-	].map( ( el ) => initGoogleMap( el ) );
-} //end init()
+	].map( initGoogleMap );
+} );
 
+// =======
 // HELPERS
+// =======
+
+function domReady( callback: () => unknown ) {
+	if ( typeof document === 'undefined' ) {
+		return;
+	} //end if
+
+	if (
+		document.readyState === 'complete' || // DOMContentLoaded + Images/Styles/etc loaded, so we call directly.
+		document.readyState === 'interactive' // DOMContentLoaded fires at this point, so we call directly.
+	) {
+		return void callback();
+	} //end if
+
+	// DOMContentLoaded has not fired yet, delay callback until then.
+	document.addEventListener( 'DOMContentLoaded', callback );
+} //end domReady()
 
 function initGoogleMap( el: HTMLElement ) {
 	if ( ! hasGoogleMaps( window ) ) {
