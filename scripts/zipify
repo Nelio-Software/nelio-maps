@@ -1,0 +1,117 @@
+#!/bin/bash
+
+PLUGIN=nelio-maps
+
+if [ $# -gt 2 ];
+then
+	echo "Usage: zipify [--skip-build]"
+	exit
+fi
+
+# CONFIG
+TRUNK=/tmp/$PLUGIN/trunk
+TAG=/tmp/$PLUGIN/$PLUGIN
+
+DIRS="assets"
+FILES="$PLUGIN.php index.php readme.txt options.php options-partial.php"
+
+DEV_DIRS="types"
+DEV_FILES="composer.json package.json tsconfig.json webpack.config.js"
+CONFIG_FILES="babel.config.json phpcs.ruleset.xml .editorconfig .eslintignore .eslintrc.js .stylelintignore .stylelintrc.json"
+
+PREMIUM=0
+EXPECTED_RETURNS=1
+
+# WP VERSION REQUIREMENTS
+wp=`grep "Requires at least" readme.txt | cut -d: -f2 | xargs`
+if [ `grep "Requires at least.*$wp" $PLUGIN.php | wc -l` -eq 0 ];
+then
+	echo "Invalid WordPress version in $PLUGIN.php"
+	exit 1
+fi
+if [ $PREMIUM -eq 1 ];
+then
+	if [ `grep "Requires at least.*$wp" premium/$PLUGIN-premium.php | wc -l` -eq 0 ];
+		then
+		echo "Invalid WordPress version in premium/$PLUGIN-premium.php"
+		exit 1
+	fi
+fi
+
+# PHP VERSION REQUIREMENTS
+php=`grep "Requires PHP" readme.txt | cut -d: -f2 | xargs`
+if [ `grep "Requires PHP.*$php" $PLUGIN.php | wc -l` -eq 0 ];
+then
+	echo "Invalid PHP version in $PLUGIN.php"
+	exit 1
+fi
+if [ $PREMIUM -eq 1 ];
+then
+	if [ `grep "Requires PHP.*$php" premium/$PLUGIN-premium.php | wc -l` -eq 0 ];
+	then
+		echo "Invalid PHP version in premium/$PLUGIN-premium.php"
+		exit 1
+	fi
+fi
+
+# PREPARE STUFF
+rm -rf /tmp/$PLUGIN
+mkdir /tmp/$PLUGIN
+mkdir $TRUNK
+mkdir $TAG
+
+rm -rf vendor
+composer install --no-dev
+
+# COPY TRUNK
+if [ "$1" != "--skip-build" ];
+then
+	echo "Building assets..."
+	npm rebuild node-sass
+	yarn run build
+	if [ $? -ne 0 ];
+	then
+		composer install >/dev/null 2>&1
+		echo "Error while building assets!" >&2
+		exit 1
+	fi
+fi
+
+echo "Copying files..."
+cp -r $DIRS $TRUNK
+cp -r $FILES $TRUNK
+cp -r $DEV_DIRS $TRUNK
+cp -r $DEV_FILES $TRUNK
+cp -r $CONFIG_FILES $TRUNK
+
+if [ $PREMIUM -eq 1 ];
+then
+	echo "Remove premium files..."
+	rm -rf $TRUNK/src/premium
+fi
+
+echo "Build PHP loaders..."
+pushd $TRUNK >/dev/null 2>&1
+composer dumpautoload -o
+popd >/dev/null 2>&1
+
+# COPY TAG
+echo "Create tag files..."
+cp -r $DIRS $TAG
+cp -r $FILES $TAG
+rm -rf $TAG/assets/src
+
+# Remove composer binaries
+rm -rf $TRUNK/vendor/bin
+rm -rf $TAG/vendor/bin
+
+# MAKE ZIP
+echo "Making zip file..."
+version=`cat ${PLUGIN}.php | grep "* Version" | sed -e "s/ //g" | cut -d: -f2`
+rm -f /tmp/${PLUGIN}.${version}.zip >/dev/null 2>&1
+pushd /tmp/${PLUGIN} >/dev/null 2>&1
+zip -r /tmp/${PLUGIN}.${version}.zip ${PLUGIN} >/dev/null 2>&1
+popd >/dev/null 2>&1
+
+# RECOVER STATE
+composer install >/dev/null 2>&1

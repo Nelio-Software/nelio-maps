@@ -1,0 +1,258 @@
+#!/bin/bash
+
+############################################################
+#   Script Setup
+############################################################
+
+README="readme.txt"
+ZIPIFY_TAG="/tmp/nelio-maps/nelio-maps"
+ZIPIFY_TRUNK="/tmp/nelio-maps/trunk"
+MAIN="nelio-maps.php"
+
+
+############################################################
+#   Helpers
+############################################################
+
+CMD=`basename $0`
+CMD_PATH=`dirname $0`
+
+function die {
+	echo "$2" >&2
+	exit $1
+}
+
+function help {
+	die 1 "Usage: $0 VERSION SVN_DIR"
+}
+
+if [ $# -ne 2 ];
+then
+	help
+fi
+
+VERSION=$1
+SVN_DIR=$2
+
+
+############################################################
+#   Some Checks
+############################################################
+
+if [ `git rev-parse --abbrev-ref HEAD` != "main" ];
+then
+	die 2 "Invalid branch. Expected “main.”"
+fi
+
+if [ `echo "$VERSION" | grep -e "[0-9]\+\.[0-9]\+\.[0-9]\+" | wc -l` -ne 1 ];
+then
+	die 3 "Invalid version number. Expected pattern: \`X.Y.Z'."
+fi
+
+if [ ! -d "$SVN_DIR" ];
+then
+	die 4 "Directory \`$SVN_DIR' not found."
+fi
+
+if [ ! -d "$SVN_DIR/trunk" ] || [ ! -d "$SVN_DIR/tags" ];
+then
+	die 5 "Directory \`$SVN_DIR' doesn't look like a proper SVN directory; it's missing trunk and tags."
+fi
+
+changelog_line=`grep . "$README" | grep -n "== Changelog ==" | cut -d: -f1`
+if [ `grep . "$README" | head -n $((changelog_line+1)) | tail -n 1 | grep "= $VERSION[^=]\+=" | wc -l` -ne 1 ];
+then
+	die 6 "Last version in $README's Changelog isn't version \`$VERSION'. Please fix this."
+fi
+
+
+upgrade_notice_line=`grep . "$README" | grep -n "== Upgrade Notice ==" | cut -d: -f1`
+if [ `grep . "$README" | head -n $((upgrade_notice_line+1)) | tail -n 1 | grep "= $VERSION[^=]\+=" | wc -l` -ne 1 ];
+then
+	die 7 "Upgrade notice doesn't include a description for version \`$VERSION'. Please fix this."
+fi
+
+echo "Linting PHP code..."
+composer lint . 2>/dev/null
+if [ $? -ne 0 ];
+then
+	die 8 "Fix all linting issues."
+fi
+
+
+############################################################
+#   Program Starts Here
+############################################################
+
+# Set Date
+# ----------------------------------------------------------
+
+date=`LC_TIME=en_US date "+%B %-d, %Y"`
+sed -e "s/^= ${VERSION}.*=$/= ${VERSION} (${date}) =/g" "$README" > /tmp/aux.md
+mv /tmp/aux.md "$README"
+
+
+# Update version number
+# ----------------------------------------------------------
+
+sed -e "s/^ \* Version:.*$/ * Version:           ${VERSION}/" "$MAIN" > /tmp/aux.php
+mv /tmp/aux.php "$MAIN"
+
+
+# Generate new version
+# ----------------------------------------------------------
+
+echo -n "Preparing trunk and tag files..."
+$CMD_PATH/zipify >/dev/null 2>&1
+if [ $? -ne 0 ];
+then
+	echo " Error!"
+	echo "Something went wrong when building the project. Please run \`./scripts/zipify' manually and look at its actual output."
+	exit 100
+fi
+
+
+if [ `grep "'dependencies' => array()" assets/dist/js/public.asset.php | wc -l` -ne 1 ];
+then
+	echo " Error!"
+	echo "“Public” has a non-empty list of dependencies."
+	exit 100
+fi
+
+for d in assets/src/admin/scripts/* ; do
+	if [ `grep "'dependencies' => array()" assets/dist/js/$(basename "$d").asset.php | wc -l` -ne 1 ];
+	then
+		echo " Error!"
+		echo "assets/dist/js/$(basename "$d").asset.php has a non-empty list of dependencies."
+		exit 100
+	fi
+done
+
+echo " Done!"
+
+
+# Clean SVN changes
+# ----------------------------------------------------------
+
+echo -n "Cleaning SVN..."
+
+pushd $SVN_DIR >/dev/null 2>&1
+svn revert -R . >/dev/null 2>&1
+[[ `svn st | cut -c8- | wc -l` -gt 0 ]] && rm -rf `svn st | cut -c8-`
+svn up >/dev/null 2>&1
+popd >/dev/null 2>&1
+
+echo " Done!"
+
+
+# UPDATE TRUNK
+# ----------------------------------------------------------
+
+echo -n "Updating trunk..."
+
+pushd $SVN_DIR >/dev/null 2>&1
+
+# Clean trunk
+rm -rf trunk >/dev/null 2>&1
+
+# Copy trunk
+cp -r "$ZIPIFY_TRUNK" trunk >/dev/null 2>&1
+
+# Remove empty directories
+for dir in `find trunk -type d | sort -r`;
+do
+	rmdir $dir >/dev/null 2>&1
+done
+
+# Add new files
+for file in `svn st | grep "^?" | sed -e "s/\s\+/:/" | cut -d: -f2`;
+do
+	svn add $file >/dev/null 2>&1
+done
+
+# Delete old files
+for file in `svn st | grep "^\!" | sed -e "s/\s\+/:/" | cut -d: -f2`;
+do
+	svn rm $file >/dev/null 2>&1
+done
+
+popd >/dev/null 2>&1
+
+echo " Done!"
+
+
+# UPDATE TAG
+# ----------------------------------------------------------
+
+echo -n "Updating tag..."
+
+pushd $SVN_DIR >/dev/null 2>&1
+
+# Delete tag (if it exists)
+[ -d "tags/$VERSION" ] && svn rm --force tags/$VERSION >/dev/null 2>&1
+
+# Copy trunk into tag
+svn cp trunk "tags/$VERSION" >/dev/null 2>&1
+
+# Remove unnecessary files from tag
+pushd "tags/$VERSION" >/dev/null 2>&1
+find . -type f | while read file;
+do
+	if [ ! -e "$ZIPIFY_TAG/$file" ];
+	then
+		svn rm --force $file >/dev/null 2>&1
+	fi
+done
+popd >/dev/null 2>&1
+
+# Remove empty directories
+for dir in `find "tags/$VERSION" -type d | sort -r`;
+do
+	rmdir $dir >/dev/null 2>&1
+done
+
+# Delete old files
+for file in `svn st | grep "^\!" | sed -e "s/\s\+/:/" | cut -d: -f2`;
+do
+	svn rm $file >/dev/null 2>&1
+done
+
+# Update tag version
+sed -e "s/^Stable tag:.*$/Stable tag: ${VERSION}/" "tags/$VERSION/$README" > /tmp/aux.md
+mv /tmp/aux.md "tags/$VERSION/$README" >/dev/null 2>&1
+
+popd >/dev/null 2>&1
+
+echo " Done!"
+
+
+# LAST STEP
+# ----------------------------------------------------------
+
+echo ""
+echo ""
+echo ""
+
+if [ `grep -i "Stable tag:.*$VERSION" "$README" | wc -l` -eq 1 ];
+then
+
+	echo "SVN folder is now ready! You can commit the changes whenver you want:"
+	echo "cd "$SVN_DIR" && svn commit -m \"Upload new stable version $VERSION\""
+	echo ""
+
+else
+
+	echo "SVN folder is now ready! You can commit the changes whenver you want:"
+	echo "cd "$SVN_DIR" && svn commit -m \"Upload new version $VERSION\""
+	echo ""
+	echo "Also, please keep in mind that you'll eventually have to change the stable tag in \`trunk/$README':"
+	echo "cd "$SVN_DIR" && svn commit -m \"Upload new stable version $VERSION\""
+	echo ""
+
+fi
+
+echo "Commit new tag to git:"
+echo "git commit -am \"Release version $VERSION\""
+echo "git tag -a $VERSION -m \"Tag version $VERSION\""
+echo "git push && git push --tags"
+echo ""
