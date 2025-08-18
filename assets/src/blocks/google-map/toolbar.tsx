@@ -18,7 +18,7 @@ import { AddressSearch } from './address-search';
 import type { EditProps } from './types';
 
 export const ToolbarControls = ( {
-	attributes: { addressAlignment, blockAlignment, isMarkerVisible },
+	attributes: { addressAlignment, blockAlignment, isMarkerVisible, zoom },
 	setAttributes,
 }: EditProps ): JSX.Element => (
 	/* @ts-expect-error BlockControls should work… */
@@ -50,7 +50,11 @@ export const ToolbarControls = ( {
 									'nelio-maps'
 								) }
 								onChange={ ( lat, lng ) =>
-									setAttributes( { lat, lng } )
+									setAttributes( {
+										lat,
+										lng,
+										zoom: Math.max( 12, zoom ),
+									} )
 								}
 							/>
 						</>

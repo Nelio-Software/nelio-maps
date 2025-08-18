@@ -1,71 +1,58 @@
-// @ts-nocheck
-/* eslint-disable */
-// TODO DAVID. Maybe improve types at some point.
+/**
+ * WordPress dependencies
+ */
+import { useRef } from '@wordpress/element';
 
 /**
  * External dependencies
  */
-import { compose, withProps, withHandlers } from 'recompose';
-import { withScriptjs, withGoogleMap, GoogleMap } from 'react-google-maps';
+import { GoogleMap } from '@react-google-maps/api';
 
-export const MapBlock = compose(
-	withProps( {
-		loadingElement: <div style={ { height: '100%' } } />,
-		mapElement: <div style={ { height: '100%' } } />,
-	} ),
-	withHandlers( () => {
-		const refs = {
-			map: undefined,
-		};
+export type MapBlockProps = {
+	readonly zoom: number;
+	readonly height: string;
+	readonly center: { readonly lat: number; readonly lng: number };
+	readonly options: Record< string, any >;
+	readonly onZoomChanged: ( zoom: number ) => void;
+	readonly onCenterChanged: ( lat: string, lng: string ) => void;
+	readonly children: JSX.Element | ReadonlyArray< JSX.Element >;
+};
 
-		return {
-			onMapMounted: () => ( ref ) => {
-				refs.map = ref;
-			},
-			onZoomChanged: ( props ) => () => {
-				props.onZoomChanged( refs.map.getZoom() );
-			},
-			onCenterChanged: ( props ) => () => {
-				const center = refs.map.getCenter();
-
-				const lat = center.lat();
-				const lng = center.lng();
-				props.onCenterChanged( `${ lat }`, `${ lng }` );
-			},
-		};
-	} ),
-	withScriptjs,
-	withGoogleMap
-)( ( props ) => {
-	const { children } = props;
-
+export const MapBlock = ( {
+	zoom,
+	height,
+	center,
+	children,
+	options,
+	onZoomChanged,
+	onCenterChanged,
+}: MapBlockProps ): JSX.Element => {
+	const mapRef = useRef< google.maps.Map | null >( null );
 	return (
 		<GoogleMap
-			ref={ props.onMapMounted }
-			zoom={ props.zoom }
-			center={ props.center }
-			options={ props.options }
-			defaultZoom={ props.defaultZoom }
-			defaultCenter={ props.defaultCenter }
-			defaultOptions={ props.defaultOptions }
-			onZoomChanged={ props.onZoomChanged }
-			onCenterChanged={ props.onCenterChanged }
+			onLoad={ ( ref ) => {
+				mapRef.current = ref;
+			} }
+			mapContainerClassName="nelio-maps-google-map-wrap"
+			mapContainerStyle={ { height } }
+			zoom={ zoom }
+			center={ center }
+			options={ options }
+			onZoomChanged={ () =>
+				onZoomChanged( mapRef.current?.getZoom() ?? 1 )
+			}
+			onCenterChanged={ () => {
+				const newCenter = mapRef.current?.getCenter();
+				if ( ! newCenter ) {
+					return;
+				} //end if
+
+				const lat = newCenter.lat();
+				const lng = newCenter.lng();
+				onCenterChanged( `${ lat }`, `${ lng }` );
+			} }
 		>
 			{ children }
 		</GoogleMap>
 	);
-} ) as ( props: {
-	readonly googleMapURL: string;
-	readonly loadingElement: JSX.Element;
-	readonly mapElement: JSX.Element;
-	readonly containerElement: JSX.Element;
-	readonly zoom: number;
-	readonly center: { readonly lat: number; readonly lng: number };
-	readonly options: Record< string, any >;
-	readonly defaultZoom: number;
-	readonly defaultCenter: { readonly lat: string; readonly lng: string };
-	readonly defaultOptions: Record< string, any >;
-	readonly onZoomChanged: ( zoom: number ) => void;
-	readonly onCenterChanged: ( lat: string, lng: string ) => void;
-	readonly children: JSX.Element | ReadonlyArray< JSX.Element >;
-} ) => JSX.Element;
+};

@@ -9,8 +9,7 @@ import { Dashicon } from '@wordpress/components';
  * External dependencies
  */
 import { clsx } from 'clsx';
-import { Marker } from 'react-google-maps';
-import { debounce } from 'lodash';
+import { useJsApiLoader, Marker } from '@react-google-maps/api';
 
 /**
  * Internal dependencies
@@ -19,15 +18,18 @@ import './editor.scss';
 import { Inspector } from './inspector';
 import { ToolbarControls } from './toolbar';
 import { MapBlock } from './map-block';
-import {
-	useGoogleMapsApiKey,
-	useGoogleMapsUrl,
-	useOptionsPageUrl,
-} from './hooks';
+import { useGoogleMapsApiKey, useOptionsPageUrl } from './hooks';
 import type { EditProps } from './types';
 
 export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 	const blockProps = useBlockProps();
+	const googleMapsApiKey = useGoogleMapsApiKey();
+	const optionsPageUrl = useOptionsPageUrl();
+	const { isLoaded } = useJsApiLoader( {
+		id: 'google-map-script',
+		googleMapsApiKey,
+		libraries: [ 'places' ],
+	} );
 
 	const {
 		attributes: {
@@ -53,9 +55,9 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 		styles: safeParse( customStyle ),
 	};
 
-	const googleMapURL = useGoogleMapsUrl();
-	const googleMapsApiKey = useGoogleMapsApiKey();
-	const optionsPageUrl = useOptionsPageUrl();
+	if ( ! isLoaded ) {
+		return <div { ...blockProps }>Loading… TODO DAVID</div>;
+	} //end if
 
 	return (
 		<div { ...blockProps }>
@@ -72,40 +74,19 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 				{ googleMapsApiKey ? (
 					<>
 						<MapBlock
-							googleMapURL={ googleMapURL }
-							loadingElement={
-								<div style={ { height: '100%' } } />
-							}
-							mapElement={ <div style={ { height: '100%' } } /> }
-							containerElement={
-								<div
-									className="nelio-maps-google-map-wrap"
-									style={ {
-										height: `${ Math.floor(
-											height * 0.7
-										) }vh`,
-									} }
-								/>
-							}
 							zoom={ zoom }
+							height={ `${ Math.floor( height * 0.7 ) }vh` }
 							center={ numberifyCoords( { lat, lng } ) }
 							options={ options }
-							defaultZoom={ zoom }
-							defaultCenter={ { lat, lng } }
-							defaultOptions={ options }
-							onZoomChanged={ debounce(
-								( value: number ) =>
-									setAttributes( { zoom: value } ),
-								500
-							) }
-							onCenterChanged={ debounce(
-								( _lat: string, _lng: string ) =>
-									setAttributes( {
-										lat: _lat,
-										lng: _lng,
-									} ),
-								500
-							) }
+							onZoomChanged={ ( value ) =>
+								setAttributes( { zoom: value } )
+							}
+							onCenterChanged={ ( _lat: string, _lng: string ) =>
+								setAttributes( {
+									lat: _lat,
+									lng: _lng,
+								} )
+							}
 						>
 							<Marker
 								position={ numberifyCoords( {
