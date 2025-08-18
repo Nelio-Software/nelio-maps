@@ -1,71 +1,51 @@
-// @ts-nocheck
-/* eslint-disable */
-// TODO DAVID. Improve this component and remove cast.
-
 /**
  * WordPress dependencies
  */
 import { TextControl } from '@wordpress/components';
+import { useRef, useState } from '@wordpress/element';
 
 /**
  * External dependencies
  */
-import { compose, withState, withProps, withHandlers } from 'recompose';
-import { withScriptjs } from 'react-google-maps';
-import { StandaloneSearchBox } from 'react-google-maps/lib/components/places/StandaloneSearchBox';
+import { StandaloneSearchBox } from '@react-google-maps/api';
 
-export const AddressSearch = compose(
-	withState( 'value', 'setValue', ( props ) => {
-		return props.value;
-	} ),
+export type AddressSearchProps = {
+	readonly className?: string;
+	readonly label?: string;
+	readonly placeholder?: string;
+	readonly onChange: ( lat: string, lng: string ) => void;
+};
 
-	withProps( {
-		loadingElement: <div />,
-		containerElement: <div />,
-	} ),
+export const AddressSearch = ( {
+	className,
+	label,
+	placeholder,
+	onChange,
+}: AddressSearchProps ): JSX.Element => {
+	const searchBoxRef = useRef< google.maps.places.SearchBox | null >( null );
 
-	withHandlers( () => {
-		const refs = {
-			searchBox: undefined,
-		};
+	const [ value, setValue ] = useState( '' );
+	const onPlacesChanged = () => {
+		const place = searchBoxRef.current?.getPlaces()?.[ 0 ];
+		if ( ! place ) {
+			return;
+		} //end if
 
-		return {
-			onSearchBoxMounted: () => ( ref ) => {
-				refs.searchBox = ref;
-			},
+		const location = place.geometry?.location;
+		if ( ! location ) {
+			return;
+		} //end if
 
-			onPlacesChanged: ( props ) => () => {
-				const places = refs.searchBox.getPlaces();
-
-				if ( ! props.onChange || ! places || ! places[ 0 ] ) {
-					return;
-				} //end if
-
-				const { location } = places[ 0 ].geometry;
-				props.onChange( `${ location.lat() }`, `${ location.lng() }` );
-				props.setValue( places[ 0 ].formatted_address );
-			},
-		};
-	} ),
-
-	withScriptjs
-)( ( props ) => {
-	const {
-		bounds,
-		className,
-		label,
-		onPlacesChanged,
-		onSearchBoxMounted,
-		placeholder,
-		setValue,
-		value,
-	} = props;
+		onChange( `${ location.lat() }`, `${ location.lng() }` );
+		setValue( place.formatted_address || value );
+	};
 
 	return (
-		<div data-standalone-searchbox="" className={ className }>
+		<div className={ className }>
 			<StandaloneSearchBox
-				ref={ onSearchBoxMounted }
-				bounds={ bounds }
+				onLoad={ ( ref ) => {
+					searchBoxRef.current = ref;
+				} }
 				onPlacesChanged={ onPlacesChanged }
 			>
 				<TextControl
@@ -77,9 +57,4 @@ export const AddressSearch = compose(
 			</StandaloneSearchBox>
 		</div>
 	);
-} ) as ( props: {
-	readonly className?: string;
-	readonly googleMapURL: string;
-	readonly placeholder?: string;
-	readonly onChange: ( lat: string, lng: string ) => void;
-} ) => JSX.Element;
+};

@@ -32,6 +32,7 @@
 		"start": "wp-scripts start"
 	},
 	"devDependencies": {
+		"@react-google-maps/api": "^2.20.7",
 		"@svgr/webpack": "^8.1.0",
 		"@types/lodash": "^4.17.20",
 		"@types/recompose": "^0.30.15",

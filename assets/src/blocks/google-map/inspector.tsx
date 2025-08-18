@@ -17,7 +17,7 @@ import {
 import { MapStyles } from './map-styles';
 import { AddressSearch } from './address-search';
 import { EditProps } from './types';
-import { useGoogleMapsApiKey, useGoogleMapsUrl } from './hooks';
+import { useGoogleMapsApiKey } from './hooks';
 
 export const Inspector = ( {
 	attributes: {
@@ -34,7 +34,6 @@ export const Inspector = ( {
 	},
 	setAttributes,
 }: EditProps ): JSX.Element | null => {
-	const googleMapsUrl = useGoogleMapsUrl();
 	const googleMapsApiKey = useGoogleMapsApiKey();
 
 	if ( ! googleMapsApiKey ) {
@@ -104,7 +103,6 @@ export const Inspector = ( {
 					<>
 						<p>
 							<AddressSearch
-								googleMapURL={ googleMapsUrl }
 								placeholder={ _x(
 									'Search location',
 									'user',
