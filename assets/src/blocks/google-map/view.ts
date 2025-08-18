@@ -38,9 +38,8 @@ function initGoogleMap( el: HTMLElement ) {
 		return;
 	} //end if
 
-	const map = new window.google.maps.Map( el, options );
-
 	const marker = extractMarkerPositionIfAny( el );
+	const map = new window.google.maps.Map( el, options );
 	if ( marker ) {
 		new window.google.maps.Marker( {
 			map,
@@ -73,6 +72,7 @@ function extractMapOptions( el: HTMLElement ) {
 
 	return {
 		center: new window.google.maps.LatLng( lat, lng ),
+		clickableIcons: isDraggable,
 		draggableCursor: ! isDraggable ? 'default' : undefined,
 		disableDefaultUI: true,
 		fullscreenControl: showFullscreenButton,
