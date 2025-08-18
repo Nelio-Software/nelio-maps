@@ -4,13 +4,7 @@
 import { BlockControls, BlockAlignmentToolbar } from '@wordpress/block-editor';
 import { _x } from '@wordpress/i18n';
 
-import {
-	Button,
-	Dashicon,
-	Dropdown,
-	Toolbar,
-	Tooltip,
-} from '@wordpress/components';
+import { Dropdown, ToolbarButton, ToolbarGroup } from '@wordpress/components';
 
 /**
  * External dependencies
@@ -21,8 +15,8 @@ import { clsx } from 'clsx';
  * Internal dependencies
  */
 import { AddressSearch } from './address-search';
-import type { EditProps } from './types';
 import { useGoogleMapsUrl } from './hooks';
+import type { EditProps } from './types';
 
 export const ToolbarControls = ( {
 	attributes: { addressAlignment, blockAlignment, isMarkerVisible },
@@ -41,10 +35,10 @@ export const ToolbarControls = ( {
 				}
 			/>
 
-			<Toolbar label={ _x( 'Map', 'text', 'nelio-maps' ) }>
+			<ToolbarGroup>
 				<Dropdown
 					renderToggle={ ( { onToggle } ) => (
-						<Button
+						<ToolbarButton
 							label={ _x(
 								'Center map',
 								'command',
@@ -73,13 +67,13 @@ export const ToolbarControls = ( {
 						);
 					} }
 				/>
-			</Toolbar>
+			</ToolbarGroup>
 
 			{ isMarkerVisible && (
-				<Toolbar label={ _x( 'Marker', 'text', 'nelio-maps' ) }>
+				<ToolbarGroup>
 					<Dropdown
 						renderToggle={ ( { onToggle } ) => (
-							<Button
+							<ToolbarButton
 								label={ _x(
 									'Set marker location',
 									'command',
@@ -111,60 +105,51 @@ export const ToolbarControls = ( {
 						} }
 					/>
 
-					<Tooltip
-						text={ _x(
+					<ToolbarButton
+						className={ clsx(
+							'components-icon-button',
+							'components-toolbar__control',
+							{ 'is-active': 'left' === addressAlignment }
+						) }
+						label={ _x(
 							'Left address block',
 							'command',
 							'nelio-maps'
 						) }
-					>
-						<Button
-							className={ clsx(
-								'components-icon-button',
-								'components-toolbar__control',
-								{ 'is-active': 'left' === addressAlignment }
-							) }
-							onClick={ () =>
-								setAttributes( {
-									addressAlignment:
-										'left' !== addressAlignment
-											? 'left'
-											: 'none',
-								} )
+						icon="align-left"
+						onClick={ () =>
+							setAttributes( {
+								addressAlignment:
+									'left' !== addressAlignment
+										? 'left'
+										: 'none',
+							} )
+						}
+					/>
+					<ToolbarButton
+						icon="align-right"
+						className={ clsx(
+							'components-icon-button',
+							'components-toolbar__control',
+							{
+								'is-active': 'right' === addressAlignment,
 							}
-						>
-							<Dashicon icon="align-left" />
-						</Button>
-					</Tooltip>
-
-					<Tooltip
-						text={ _x(
+						) }
+						label={ _x(
 							'Right address block',
 							'command',
 							'nelio-maps'
 						) }
-					>
-						<Button
-							className={ clsx(
-								'components-icon-button',
-								'components-toolbar__control',
-								{
-									'is-active': 'right' === addressAlignment,
-								}
-							) }
-							onClick={ () =>
-								setAttributes( {
-									addressAlignment:
-										'right' !== addressAlignment
-											? 'right'
-											: 'none',
-								} )
-							}
-						>
-							<Dashicon icon="align-right" />
-						</Button>
-					</Tooltip>
-				</Toolbar>
+						onClick={ () =>
+							setAttributes( {
+								addressAlignment:
+									'right' !== addressAlignment
+										? 'right'
+										: 'none',
+							} )
+						}
+					/>
+				</ToolbarGroup>
 			) }
 		</BlockControls>
 	);
