@@ -74,6 +74,7 @@ function extractMapOptions( el: HTMLElement ) {
 	return {
 		center: new window.google.maps.LatLng( lat, lng ),
 		draggableCursor: ! isDraggable ? 'default' : undefined,
+		disableDefaultUI: true,
 		fullscreenControl: showFullscreenButton,
 		gestureHandling: isDraggable ? 'cooperative' : 'none',
 		mapTypeControl: showMapTypeButton,
