@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { _x } from '@wordpress/i18n';
-import { RichText } from '@wordpress/block-editor';
+import { RichText, useBlockProps } from '@wordpress/block-editor';
 import { Dashicon } from '@wordpress/components';
 
 /**
@@ -26,6 +26,8 @@ import {
 import type { EditProps } from './types';
 
 export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
+	const blockProps = useBlockProps();
+
 	const {
 		attributes: {
 			address,
@@ -56,7 +58,7 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 	const optionsPageUrl = useOptionsPageUrl();
 
 	return (
-		<>
+		<div { ...blockProps }>
 			<ToolbarControls { ...props } />
 
 			<Inspector { ...props } />
@@ -173,7 +175,7 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 					</div>
 				) }
 			</section>
-		</>
+		</div>
 	);
 };
 
