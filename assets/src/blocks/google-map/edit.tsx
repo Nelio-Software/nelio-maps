@@ -45,12 +45,11 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 	} = props;
 
 	const options = {
-		zoomControl: true,
+		zoomControl: false,
 		mapTypeControl: false,
 		streetViewControl: false,
 		fullscreenControl: false,
-		gestureHandling: 'cooperative',
-		draggable: true,
+		draggable: false,
 		styles: safeParse( customStyle ),
 	};
 

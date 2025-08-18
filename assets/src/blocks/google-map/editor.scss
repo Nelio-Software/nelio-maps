@@ -14,7 +14,7 @@
 		}
 
 		.nelio-maps-google-map-placeholder-key {
-			background: white;
+			background: #fff;
 			box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 			display: inline-block;
 			padding: 1em 2em 1.4em;
@@ -29,12 +29,6 @@
 				font-weight: 700;
 			}
 		}
-	}
-
-	.nelio-maps-address-search-dropdown {
-		box-sizing: border-box;
-		margin: 8px auto;
-		width: calc(100% - 16px);
 	}
 
 	section.nelio-maps-google-map {
@@ -52,7 +46,15 @@
 	}
 }
 
+.nelio-maps-address-search-dropdown {
+	width: 20em;
+
+	.components-base-control__field {
+		margin-bottom: unset !important;
+	}
+}
+
 /* Google Location Search Dropdown */
 .pac-container.pac-logo {
-	z-index: 99999;
+	z-index: 99999999;
 }

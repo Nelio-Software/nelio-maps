@@ -59,9 +59,9 @@ export const ToolbarControls = ( {
 										'user',
 										'nelio-maps'
 									) }
-									onChange={ ( lat, lng ) => {
-										setAttributes( { lat, lng } );
-									} }
+									onChange={ ( lat, lng ) =>
+										setAttributes( { lat, lng } )
+									}
 								/>
 							</>
 						);
@@ -94,11 +94,11 @@ export const ToolbarControls = ( {
 											'user',
 											'nelio-maps'
 										) }
-										onChange={ ( lat, lng ) => {
+										onChange={ ( lat, lng ) =>
 											setAttributes( {
 												marker: { lat, lng },
-											} );
-										} }
+											} )
+										}
 									/>
 								</>
 							);
