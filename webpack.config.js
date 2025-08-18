@@ -58,26 +58,6 @@ const config = {
 			],
 		} ),
 	].filter( /* if plugin exists */ ( x ) => !! x ),
-	module: {
-		...defaultConfig.module,
-		rules: [
-			...defaultConfig.module.rules,
-			{
-				test: /\.(png|jpe?g|gif)$/,
-				issuer: /\.tsx?$/,
-				use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: 'images/[name].[ext]',
-							publicPath: '../',
-						},
-						loader: 'base64-inline-loader',
-					},
-				],
-			},
-		],
-	},
 	watchOptions: {
 		ignored: /node_modules|^((?!(assets.src)).)*$/,
 	},

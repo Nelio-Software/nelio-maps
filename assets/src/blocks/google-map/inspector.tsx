@@ -72,12 +72,7 @@ export const Inspector = ( {
 					min={ 1 }
 					max={ 18 }
 				/>
-			</PanelBody>
 
-			<PanelBody
-				title={ _x( 'Style', 'text', 'nelio-maps' ) }
-				initialOpen={ false }
-			>
 				<MapStyles
 					value={ style }
 					customStyle={ customStyle }
