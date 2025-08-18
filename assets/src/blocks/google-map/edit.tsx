@@ -15,6 +15,7 @@ import { debounce } from 'lodash';
 /**
  * Internal dependencies
  */
+import './editor.scss';
 import { Inspector } from './inspector';
 import { ToolbarControls } from './toolbar';
 import { MapBlock } from './map-block';
@@ -145,7 +146,7 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 				) : (
 					<div className="nelio-maps-google-map-placeholder">
 						<div>
-							<Dashicon icon="location" />
+							<Dashicon icon="location-alt" />
 						</div>
 						<div className="nelio-maps-google-map-placeholder-key">
 							<p>

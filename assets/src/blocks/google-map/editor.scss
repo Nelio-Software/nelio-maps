@@ -1,22 +1,23 @@
 #editor {
+
 	.nelio-maps-google-map.is-api-key-missing {
 		background: #eee;
 		position: relative;
 		text-align: center;
+		padding: 2em 2em 4em;
 
-		svg {
-			margin: 3em auto 2em;
-			fill: #666;
-			height: 3em;
-			width: 3em;
+		.dashicons.dashicons-location-alt {
+			margin: 0 auto 2rem;
+			height: 1em;
+			width: 1em;
+			font-size: 5em;
 		}
 
 		.nelio-maps-google-map-placeholder-key {
 			background: white;
 			box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 			display: inline-block;
-			margin: 0 1em 1em;
-			padding: 1em;
+			padding: 1em 2em 1.4em;
 
 			p {
 				text-align: center;
@@ -25,7 +26,7 @@
 			}
 
 			p:first-child {
-				font-weight: bold;
+				font-weight: 700;
 			}
 		}
 	}
@@ -37,6 +38,7 @@
 	}
 
 	section.nelio-maps-google-map {
+
 		.address {
 			min-width: 30%;
 
