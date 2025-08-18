@@ -47,6 +47,7 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 	} = props;
 
 	const options = {
+		disableDefaultUI: true,
 		zoomControl: false,
 		mapTypeControl: false,
 		streetViewControl: false,
