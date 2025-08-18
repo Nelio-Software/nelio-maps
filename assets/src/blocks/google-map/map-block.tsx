@@ -38,9 +38,13 @@ export const MapBlock = ( {
 			zoom={ zoom }
 			center={ center }
 			options={ options }
-			onZoomChanged={ () =>
-				onZoomChanged( mapRef.current?.getZoom() ?? 1 )
-			}
+			onZoomChanged={ () => {
+				const newZoom = mapRef.current?.getZoom();
+				if ( undefined === newZoom ) {
+					return;
+				} //end if
+				onZoomChanged( newZoom );
+			} }
 			onCenterChanged={ () => {
 				const newCenter = mapRef.current?.getCenter();
 				if ( ! newCenter ) {
