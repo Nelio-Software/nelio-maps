@@ -4,7 +4,7 @@
 	"name": "nelio-maps/google-map",
 	"title": "Google Map",
 	"category": "extra",
-	"icon": "none",
+	"icon": "location-alt",
 	"description": "Add and customize a beautiful Google Map with an optional marker.",
 	"keywords": [ "Location", "Geolocalization" ],
 	"version": "1.0.0",

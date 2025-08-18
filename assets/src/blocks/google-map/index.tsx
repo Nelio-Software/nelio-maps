@@ -9,13 +9,11 @@ import { registerBlockType } from '@wordpress/blocks';
 import metadata from './block.json';
 import './style.scss';
 
-import ElementIcon from './icon.svg';
 import { GoogleMapEdit } from './edit';
 import { GoogleMapSave } from './save';
 
 // @ts-expect-error I don’t know how to properly set metadata’s type
 registerBlockType( metadata, {
-	icon: <ElementIcon />,
 	edit: GoogleMapEdit,
 	save: GoogleMapSave,
 	getEditWrapperProps: ( { blockAlignment } ) =>

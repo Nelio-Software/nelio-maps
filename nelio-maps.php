@@ -70,7 +70,7 @@ class Nelio_Maps {
 
 		add_action( 'init', [ $this, 'register_block_types' ] );
 		add_action( 'init', [ $this, 'register_google_maps_api_key_option' ] );
-		add_filter( 'block_categories', [ $this, 'add_extra_category' ], 99 );
+		add_filter( 'block_categories_all', [ $this, 'add_extra_category' ], 99 );
 
 		if ( is_admin() ) {
 			require_once $this->plugin_path . '/options.php';
