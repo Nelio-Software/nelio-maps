@@ -181,7 +181,7 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 // HELPERS
 // =======
 
-function safeParse( json: string ) {
+function safeParse( json: string ): unknown {
 	try {
 		return JSON.parse( json );
 	} catch ( _ ) {

@@ -12,5 +12,5 @@ export default {
 	image,
 	value: 'default' as const,
 	label: _x( 'Default', 'text', 'nelio-maps' ),
-	json: {},
+	json: '',
 };
