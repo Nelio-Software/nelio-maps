@@ -13,7 +13,6 @@ function nelio_maps_options_page() {
 		'nelio-maps',
 		'nelio_maps_options_page_html'
 	);
-
 }//end nelio_maps_options_page()
 add_action( 'admin_menu', 'nelio_maps_options_page' );
 
@@ -39,7 +38,6 @@ function nelio_maps_settings_init() {
 		'nelio_maps',
 		'nelio_maps_general'
 	);
-
 }//end nelio_maps_settings_init()
 add_action( 'admin_init', 'nelio_maps_settings_init' );
 
@@ -53,6 +51,4 @@ function nelio_maps_render_api_key_input_field() {
 		esc_attr( $setting_name ),
 		esc_attr( $option )
 	);
-
 }//end nelio_maps_render_api_key_input_field()
-

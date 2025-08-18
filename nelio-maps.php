@@ -49,7 +49,6 @@ class Nelio_Maps {
 		}//end if
 
 		return self::$instance;
-
 	}//end instance()
 
 	public function init_options() {
@@ -59,7 +58,6 @@ class Nelio_Maps {
 
 		// load textdomain.
 		load_plugin_textdomain( 'nelio-maps' );
-
 	}//end init_options()
 
 	public function init_hooks() {
@@ -68,18 +66,18 @@ class Nelio_Maps {
 			return;
 		}//end if
 
-		add_action( 'init', [ $this, 'register_block_types' ] );
-		add_action( 'init', [ $this, 'register_google_maps_api_key_option' ] );
-		add_filter( 'block_categories_all', [ $this, 'add_extra_category' ], 99 );
+		add_action( 'init', array( $this, 'register_block_types' ) );
+		add_action( 'init', array( $this, 'register_google_maps_api_key_option' ) );
+		add_filter( 'block_categories_all', array( $this, 'add_extra_category' ), 99 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'register_script_dependencies' ) );
 
 		if ( is_admin() ) {
 			require_once $this->plugin_path . '/options.php';
 		}//end if
-
 	}//end init_hooks()
 
 	public function register_block_types() {
-		$blocks = [ 'google-map' ];
+		$blocks = array( 'google-map' );
 		foreach ( $blocks as $block ) {
 			register_block_type(
 				$this->plugin_path . "/assets/dist/blocks/{$block}"
@@ -87,9 +85,18 @@ class Nelio_Maps {
 		}//end foreach
 	}//end register_block_types()
 
+	public function register_script_dependencies() {
+	}//end register_script_dependencies()
+
 	public function add_extra_category( $categories ) {
 
-		if ( count( array_filter( $categories, function( $category ) { return 'extra' === $category['slug']; } ) ) ) {
+		if ( count(
+			array_filter(
+				$categories,
+				function ( $category ) {
+					return 'extra' === $category['slug']; } 
+			) 
+		) ) {
 			return $categories;
 		}//end if
 
@@ -102,16 +109,13 @@ class Nelio_Maps {
 				),
 			)
 		);
-
 	}//end add_extra_category()
 
 	public function register_google_maps_api_key_option() {
 
 		$api_key = get_option( 'nelio_maps_api_key_option', '' );
 		update_option( 'nelio_maps_api_key_option', $api_key );
-
 	}//end register_google_maps_api_key_option()
-
 }//end class
 
 // Start plugin.

@@ -6,13 +6,11 @@
 
 	<arg name="extensions" value="php" />
 
-	<exclude-pattern>dist</exclude-pattern>
+	<exclude-pattern>assets/dist</exclude-pattern>
 	<exclude-pattern>node_modules</exclude-pattern>
 	<exclude-pattern>vendor</exclude-pattern>
 	<exclude-pattern>\.lando</exclude-pattern>
 	<exclude-pattern>\.wordpress</exclude-pattern>
-	<exclude-pattern>*\.js</exclude-pattern>
-	<exclude-pattern>*\.ts</exclude-pattern>
 
 	<!-- Basic -->
 	<rule ref="PHPCompatibility" />
@@ -32,6 +30,13 @@
 
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 
+		<exclude name="WordPressVIPMinimum.JS.DangerouslySetInnerHTML" />
+		<exclude name="WordPressVIPMinimum.JS.HTMLExecutingFunctions" />
+		<exclude name="WordPressVIPMinimum.JS.InnerHTML" />
+		<exclude name="WordPressVIPMinimum.JS.StringConcat" />
+		<exclude name="WordPressVIPMinimum.JS.StrippingTags" />
+		<exclude name="WordPressVIPMinimum.JS.Window" />
+
 		<exclude name="Squiz.Commenting.FunctionComment.WrongStyle" />
 	</rule>
 
@@ -48,25 +53,12 @@
 		<severity>5</severity>
 	</rule>
 	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
-		<exclude-pattern>nelio-ab-testing.php</exclude-pattern>
-		<exclude-pattern>plugin-installer.php</exclude-pattern>
+		<exclude-pattern>nelio-maps.php</exclude-pattern>
 		<severity>5</severity>
 	</rule>
-
-	<rule ref="WordPress.WP.Capabilities">
-		<properties>
-			<property name="custom_capabilities" type="array">
-				<element value="edit_nab_experiments" />
-				<element value="delete_nab_experiments" />
-				<element value="start_nab_experiments" />
-				<element value="stop_nab_experiments" />
-				<element value="pause_nab_experiments" />
-				<element value="resume_nab_experiments" />
-				<element value="read_nab_results" />
-				<element value="manage_nab_account" />
-				<element value="manage_nab_options" />
-			</property>
-		</properties>
+	<rule ref="Universal.Files.SeparateFunctionsFromOO.Mixed">
+		<exclude-pattern>nelio-maps.php</exclude-pattern>
+		<severity>5</severity>
 	</rule>
 
 	<!--
