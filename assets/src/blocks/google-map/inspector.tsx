@@ -43,7 +43,10 @@ export const Inspector = ( {
 
 	return (
 		<InspectorControls>
-			<PanelBody>
+			<PanelBody
+				title={ _x( 'Appearance', 'text', 'nelio-maps' ) }
+				initialOpen={ false }
+			>
 				<RangeControl
 					label={ _x( 'Map Height', 'text', 'nelio-maps' ) }
 					value={ height }
@@ -159,19 +162,9 @@ export const Inspector = ( {
 			</PanelBody>
 
 			<PanelBody
-				title={ _x( 'Map Options', 'text', 'nelio-maps' ) }
+				title={ _x( 'Interaction', 'text', 'nelio-maps' ) }
 				initialOpen={ false }
 			>
-				<p>
-					<em>
-						{ _x(
-							'Tweak the front-end appearance of your map:',
-							'user',
-							'nelio-maps'
-						) }
-					</em>
-				</p>
-
 				<CheckboxControl
 					label={ _x( 'Show zoom buttons', 'command', 'nelio-maps' ) }
 					checked={ !! areZoomButtonsVisible }
