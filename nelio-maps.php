@@ -6,12 +6,15 @@
  * Plugin Name:       Nelio Maps
  * Plugin URI:        https://neliosoftware.com
  * Description:       Simple and beautiful Google Maps block for WordPress.
- * Version:           1.0.2
+ * Version:           2.0.0beta1
  *
  * Author:            Nelio Software
  * Author URI:        http://neliosoftware.com
  * License:           GPL-3.0+
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
+ *
+ * Requires at least: 6.6
+ * Requires PHP:      7.4
  *
  * Text Domain:       nelio-maps
  *
@@ -86,6 +89,16 @@ class Nelio_Maps {
 	}//end register_block_types()
 
 	public function register_script_dependencies() {
+		$settings = array(
+			'googleMapsApiKey' => get_option( 'nelio_maps_api_key_option', '' ),
+			'optionsPageUrl'   => admin_url( 'options-general.php?page=nelio-maps' ),
+		);
+
+		wp_add_inline_script(
+			'nelio-maps-google-map-editor-script',
+			sprintf( 'NelioMaps = %s', wp_json_encode( $settings ) ),
+			'before'
+		);
 	}//end register_script_dependencies()
 
 	public function add_extra_category( $categories ) {
@@ -94,8 +107,8 @@ class Nelio_Maps {
 			array_filter(
 				$categories,
 				function ( $category ) {
-					return 'extra' === $category['slug']; } 
-			) 
+					return 'extra' === $category['slug']; }
+			)
 		) ) {
 			return $categories;
 		}//end if
@@ -112,7 +125,6 @@ class Nelio_Maps {
 	}//end add_extra_category()
 
 	public function register_google_maps_api_key_option() {
-
 		$api_key = get_option( 'nelio_maps_api_key_option', '' );
 		update_option( 'nelio_maps_api_key_option', $api_key );
 	}//end register_google_maps_api_key_option()

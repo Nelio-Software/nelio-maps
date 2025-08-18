@@ -2,10 +2,10 @@
 Contributors: nelio, davilera, avillegasn
 Donate Link: https://neliosoftware.com/
 Tags: gutenberg, block, google maps, map
-Requires at least: 5.0
-Tested up to: 5.5
+Requires PHP: 7.4
+Requires at least: 6.6
+Tested up to: 6.8
 Stable tag: 1.0.2
-Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,10 @@ Please adhere to [these instructions](https://neliosoftware.com/blog/how-to-gene
 
 == Changelog ==
 
+= 2.0.0 =
+* Rewrite codebase with TypeScript
+* Update inner dependencies
+
 = 1.0.2 =
 * Added options page to easily specify Google API Key.
 * Improved internationalization.
@@ -59,6 +63,6 @@ Please adhere to [these instructions](https://neliosoftware.com/blog/how-to-gene
 
 == Upgrade Notice ==
 
-= 1.0.2 =
-Several improvements.
+= 2.0.0 =
+Modernize plugin.
 
