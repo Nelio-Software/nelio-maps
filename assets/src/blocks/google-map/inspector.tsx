@@ -101,20 +101,18 @@ export const Inspector = ( {
 
 				{ isMarkerVisible && (
 					<>
-						<p>
-							<AddressSearch
-								placeholder={ _x(
-									'Search location',
-									'user',
-									'nelio-maps'
-								) }
-								onChange={ ( lat, lng ) => {
-									setAttributes( {
-										marker: { lat, lng },
-									} );
-								} }
-							/>
-						</p>
+						<AddressSearch
+							placeholder={ _x(
+								'Search location',
+								'user',
+								'nelio-maps'
+							) }
+							onChange={ ( lat, lng ) => {
+								setAttributes( {
+									marker: { lat, lng },
+								} );
+							} }
+						/>
 
 						<SelectControl
 							label={ _x(

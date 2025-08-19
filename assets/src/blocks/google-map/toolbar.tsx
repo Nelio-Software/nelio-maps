@@ -39,25 +39,24 @@ export const ToolbarControls = ( {
 						onClick={ onToggle }
 					/>
 				) }
-				renderContent={ () => {
+				renderContent={ ( { onClose } ) => {
 					return (
-						<>
-							<AddressSearch
-								className="nelio-maps-address-search-dropdown"
-								placeholder={ _x(
-									'Search location',
-									'user',
-									'nelio-maps'
-								) }
-								onChange={ ( lat, lng ) =>
-									setAttributes( {
-										lat,
-										lng,
-										zoom: Math.max( 12, zoom ),
-									} )
-								}
-							/>
-						</>
+						<AddressSearch
+							className="nelio-maps-address-search-dropdown"
+							placeholder={ _x(
+								'Search location',
+								'user',
+								'nelio-maps'
+							) }
+							onChange={ ( lat, lng ) => {
+								setAttributes( {
+									lat,
+									lng,
+									zoom: Math.max( 12, zoom ),
+								} );
+								onClose();
+							} }
+						/>
 					);
 				} }
 			/>
@@ -77,23 +76,23 @@ export const ToolbarControls = ( {
 							onClick={ onToggle }
 						/>
 					) }
-					renderContent={ () => {
+					popoverProps={ { onFocusOutside: () => void null } }
+					renderContent={ ( { onClose } ) => {
 						return (
-							<>
-								<AddressSearch
-									className="nelio-maps-address-search-dropdown"
-									placeholder={ _x(
-										'Search location',
-										'user',
-										'nelio-maps'
-									) }
-									onChange={ ( lat, lng ) =>
-										setAttributes( {
-											marker: { lat, lng },
-										} )
-									}
-								/>
-							</>
+							<AddressSearch
+								className="nelio-maps-address-search-dropdown"
+								placeholder={ _x(
+									'Search location',
+									'user',
+									'nelio-maps'
+								) }
+								onChange={ ( lat, lng ) => {
+									setAttributes( {
+										marker: { lat, lng },
+									} );
+									onClose();
+								} }
+							/>
 						);
 					} }
 				/>
