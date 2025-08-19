@@ -26,11 +26,6 @@ export const AddressSearch = ( {
 	>( [] );
 
 	useEffect( () => {
-		if ( ! query ) {
-			setPredictions( [] );
-			return;
-		}
-
 		void autocomplete?.getPlacePredictions( { input: query }, ( results ) =>
 			setPredictions( results || [] )
 		);
@@ -46,6 +41,8 @@ export const AddressSearch = ( {
 		if ( ! placeId || ! value ) {
 			return;
 		} //end if
+
+		setPredictions( [ value ] );
 		const description = value.description;
 
 		places?.getDetails( { placeId }, ( place ) => {
@@ -65,6 +62,7 @@ export const AddressSearch = ( {
 		<ComboboxControl
 			className={ className }
 			label={ label }
+			value={ predictions[ 0 ]?.place_id }
 			placeholder={ placeholder }
 			allowReset={ false }
 			onFilterValueChange={ setQuery }
