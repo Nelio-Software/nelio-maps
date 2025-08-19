@@ -1,13 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { TextControl } from '@wordpress/components';
+import { ComboboxControl } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
-
-/**
- * External dependencies
- */
-import { trim } from 'lodash';
 
 export type AddressSearchProps = {
 	readonly className?: string;
@@ -22,50 +17,38 @@ export const AddressSearch = ( {
 	placeholder,
 	onChange,
 }: AddressSearchProps ): JSX.Element => {
-	const [ query, doSetQuery ] = useState( '' );
+	const autocomplete = useAutocompleteService();
+	const places = usePlacesService();
+
+	const [ query, setQuery ] = useState( '' );
 	const [ predictions, setPredictions ] = useState<
 		ReadonlyArray< google.maps.places.AutocompletePrediction >
 	>( [] );
-	const [ service, setService ] =
-		useState< google.maps.places.AutocompleteService | null >( null );
-	const [ arePredictionsShown, showPredictions ] = useState( false );
-
-	const setQuery = ( v: string ) => {
-		doSetQuery( v );
-		showPredictions( !! trim( v ) );
-	};
 
 	useEffect( () => {
-		if ( ! service ) {
-			setService( new google.maps.places.AutocompleteService() );
-		}
-	}, [ service ] );
-
-	useEffect( () => {
-		if ( ! query || ! service ) {
+		if ( ! query ) {
 			setPredictions( [] );
 			return;
 		}
 
-		const request = { input: query };
-		void service.getPlacePredictions( request, ( results ) => {
-			if ( results ) {
-				setPredictions( results );
-			} else {
-				setPredictions( [] );
-			}
-		} );
-	}, [ query, service ] );
+		void autocomplete?.getPlacePredictions( { input: query }, ( results ) =>
+			setPredictions( results || [] )
+		);
+	}, [ query, autocomplete ] );
 
 	const handleSelect = (
-		placeId: google.maps.places.PlaceDetailsRequest[ 'placeId' ],
-		description: string
+		placeId:
+			| google.maps.places.PlaceDetailsRequest[ 'placeId' ]
+			| null
+			| undefined
 	) => {
-		const placesService = new window.google.maps.places.PlacesService(
-			document.createElement( 'div' )
-		);
+		const value = predictions.find( ( p ) => p.place_id === placeId );
+		if ( ! placeId || ! value ) {
+			return;
+		} //end if
+		const description = value.description;
 
-		placesService.getDetails( { placeId }, ( place ) => {
+		places?.getDetails( { placeId }, ( place ) => {
 			if ( place && place.geometry ) {
 				const location = place.geometry.location;
 				if ( ! location ) {
@@ -76,33 +59,51 @@ export const AddressSearch = ( {
 		} );
 
 		setQuery( description );
-		showPredictions( false );
 	};
 
 	return (
-		<div className={ className }>
-			<TextControl
-				label={ label }
-				value={ query }
-				onChange={ setQuery }
-				placeholder={ placeholder }
-			/>
-
-			{ arePredictionsShown && predictions.length > 0 && (
-				<ul className="TODO DAVID absolute z-10 w-full bg-white border rounded-lg shadow-md">
-					{ predictions.map( ( p ) => (
-						<li
-							key={ p.place_id }
-							onClick={ () =>
-								handleSelect( p.place_id, p.description )
-							}
-							className="TODO DAVID p-2 cursor-pointer hover:bg-gray-100"
-						>
-							{ p.description }
-						</li>
-					) ) }
-				</ul>
-			) }
-		</div>
+		<ComboboxControl
+			className={ className }
+			label={ label }
+			placeholder={ placeholder }
+			allowReset={ false }
+			onFilterValueChange={ setQuery }
+			options={ predictions.map( ( p ) => ( {
+				value: p.place_id,
+				label: p.description,
+			} ) ) }
+			onChange={ handleSelect }
+			expandOnFocus={ false }
+		/>
 	);
+};
+
+// =====
+// HOOKS
+// =====
+
+const useAutocompleteService = () => {
+	const [ service, setService ] =
+		useState< google.maps.places.AutocompleteService | null >( null );
+	useEffect( () => {
+		if ( ! service ) {
+			setService( new google.maps.places.AutocompleteService() );
+		}
+	}, [ service ] );
+	return service;
+};
+
+const usePlacesService = () => {
+	const [ service, setService ] =
+		useState< google.maps.places.PlacesService | null >( null );
+	useEffect( () => {
+		if ( ! service ) {
+			setService(
+				new window.google.maps.places.PlacesService(
+					document.createElement( 'div' )
+				)
+			);
+		}
+	}, [ service ] );
+	return service;
 };
