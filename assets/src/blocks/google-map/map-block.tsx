@@ -1,7 +1,16 @@
 /**
+ * WordPress dependencies
+ */
+import { useCallback, useEffect, useState } from '@wordpress/element';
+
+/**
  * External dependencies
  */
-import { Map, type MapProps } from '@vis.gl/react-google-maps';
+import {
+	Map,
+	type MapCameraChangedEvent,
+	type MapProps,
+} from '@vis.gl/react-google-maps';
 
 export type MapBlockProps = {
 	readonly zoom: number;
@@ -25,24 +34,15 @@ export type MapBlockProps = {
 export const MapBlock = ( {
 	zoom,
 	height,
-	center,
+	center: givenCenter,
 	children,
 	options,
 	onZoomChanged,
 	onCenterChanged,
-}: MapBlockProps ): JSX.Element => (
-	<Map
-		style={ { height } }
-		zoom={ zoom }
-		center={ center }
-		onZoomChanged={ ( event ) => {
-			const newZoom = event.map.getZoom();
-			if ( undefined === newZoom ) {
-				return;
-			} //end if
-			onZoomChanged( newZoom );
-		} }
-		onCenterChanged={ ( event ) => {
+}: MapBlockProps ): JSX.Element => {
+	const [ center, setCenter ] = useState( givenCenter );
+	const onCenterChangedCallback = useCallback(
+		( event: MapCameraChangedEvent ) => {
 			const newCenter = event.map.getCenter();
 			if ( ! newCenter ) {
 				return;
@@ -50,10 +50,38 @@ export const MapBlock = ( {
 
 			const lat = newCenter.lat();
 			const lng = newCenter.lng();
+			setCenter( { lat, lng } );
 			onCenterChanged( `${ lat }`, `${ lng }` );
-		} }
-		{ ...options }
-	>
-		{ children }
-	</Map>
-);
+		},
+		[]
+	);
+
+	useEffect( () => {
+		if (
+			givenCenter.lat === center.lat &&
+			givenCenter.lng === center.lng
+		) {
+			return;
+		} //end if
+		setCenter( givenCenter );
+	}, [ givenCenter ] );
+
+	return (
+		<Map
+			style={ { height } }
+			zoom={ zoom }
+			center={ center }
+			onZoomChanged={ ( event ) => {
+				const newZoom = event.map.getZoom();
+				if ( undefined === newZoom ) {
+					return;
+				} //end if
+				onZoomChanged( newZoom );
+			} }
+			onCenterChanged={ onCenterChangedCallback }
+			{ ...options }
+		>
+			{ children }
+		</Map>
+	);
+};
