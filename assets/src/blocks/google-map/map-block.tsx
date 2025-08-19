@@ -32,7 +32,6 @@ export const MapBlock = ( {
 	onCenterChanged,
 }: MapBlockProps ): JSX.Element => (
 	<Map
-		{ ...options }
 		style={ { height } }
 		zoom={ zoom }
 		center={ center }
@@ -53,6 +52,7 @@ export const MapBlock = ( {
 			const lng = newCenter.lng();
 			onCenterChanged( `${ lat }`, `${ lng }` );
 		} }
+		{ ...options }
 	>
 		{ children }
 	</Map>

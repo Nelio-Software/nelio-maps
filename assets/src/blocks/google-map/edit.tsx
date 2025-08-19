@@ -42,11 +42,11 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 	} = props;
 
 	const options = {
-		zoomControl: false,
+		zoomControl: true,
 		mapTypeControl: false,
 		streetViewControl: false,
 		fullscreenControl: false,
-		draggable: false,
+		draggable: true,
 		styles: safeParse( customStyle ),
 	};
 

@@ -7,11 +7,6 @@ import { _x } from '@wordpress/i18n';
 import { Dropdown, ToolbarButton, ToolbarGroup } from '@wordpress/components';
 
 /**
- * External dependencies
- */
-import { clsx } from 'clsx';
-
-/**
  * Internal dependencies
  */
 import { AddressSearch } from './address-search';
@@ -52,6 +47,7 @@ export const ToolbarControls = ( {
 								setAttributes( {
 									lat,
 									lng,
+									marker: { lat, lng },
 									zoom: Math.max( 12, zoom ),
 								} );
 								onClose();
@@ -98,17 +94,13 @@ export const ToolbarControls = ( {
 				/>
 
 				<ToolbarButton
-					className={ clsx(
-						'components-icon-button',
-						'components-toolbar__control',
-						{ 'is-active': 'left' === addressAlignment }
-					) }
 					label={ _x(
 						'Left address block',
 						'command',
 						'nelio-maps'
 					) }
 					icon="align-left"
+					isActive={ 'left' === addressAlignment }
 					onClick={ () =>
 						setAttributes( {
 							addressAlignment:
@@ -118,13 +110,7 @@ export const ToolbarControls = ( {
 				/>
 				<ToolbarButton
 					icon="align-right"
-					className={ clsx(
-						'components-icon-button',
-						'components-toolbar__control',
-						{
-							'is-active': 'right' === addressAlignment,
-						}
-					) }
+					isActive={ 'right' === addressAlignment }
 					label={ _x(
 						'Right address block',
 						'command',
