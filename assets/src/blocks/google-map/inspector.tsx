@@ -29,6 +29,8 @@ export const Inspector = ( {
 		isFullScreenButtonVisible,
 		isMapTypeButtonVisible,
 		isMarkerVisible,
+		lat: centerLat,
+		lng: centerLng,
 		style,
 		zoom,
 	},
@@ -40,6 +42,7 @@ export const Inspector = ( {
 		return null;
 	} //end if
 
+	const center = { lat: centerLat, lng: centerLng };
 	return (
 		<InspectorControls>
 			<PanelBody
@@ -89,13 +92,16 @@ export const Inspector = ( {
 
 			<PanelBody
 				title={ _x( 'Marker', 'text', 'nelio-maps' ) }
-				initialOpen={ false }
+				initialOpen={ !! isMarkerVisible }
 			>
 				<ToggleControl
 					label={ _x( 'Marker in map', 'text', 'nelio-maps' ) }
 					checked={ !! isMarkerVisible }
 					onChange={ ( value ) =>
-						setAttributes( { isMarkerVisible: value } )
+						setAttributes( {
+							marker: center,
+							isMarkerVisible: value,
+						} )
 					}
 				/>
 
