@@ -17,12 +17,12 @@ import { APIProvider, MapProps, Marker } from '@vis.gl/react-google-maps';
 import './editor.scss';
 import { Inspector } from './inspector';
 import { ToolbarControls } from './toolbar';
-import { MapBlock } from './map-block';
+import { MapBlock, type MapBlockProps } from './map-block';
 import { useGoogleMapsApiKey, useOptionsPageUrl } from './hooks';
 import type { EditProps } from './types';
 
 export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
-	const blockProps = useBlockProps();
+	const blockProps = useBlockProps( { draggable: false } );
 	const googleMapsApiKey = useGoogleMapsApiKey();
 	const optionsPageUrl = useOptionsPageUrl();
 
@@ -41,7 +41,8 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 		setAttributes,
 	} = props;
 
-	const options = {
+	const options: MapBlockProps[ 'options' ] = {
+		clickableIcons: false,
 		disableDefaultUI: true,
 		draggable: true,
 		fullscreenControl: false,

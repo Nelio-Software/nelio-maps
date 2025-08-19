@@ -18,13 +18,14 @@ export type MapBlockProps = {
 	readonly center: { readonly lat: number; readonly lng: number };
 	readonly options: Pick<
 		MapProps,
+		| 'clickableIcons'
 		| 'disableDefaultUI'
-		| 'zoomControl'
+		| 'draggable'
+		| 'fullscreenControl'
 		| 'mapTypeControl'
 		| 'streetViewControl'
-		| 'fullscreenControl'
-		| 'draggable'
 		| 'styles'
+		| 'zoomControl'
 	>;
 	readonly onZoomChanged: ( zoom: number ) => void;
 	readonly onCenterChanged: ( lat: string, lng: string ) => void;
