@@ -16,7 +16,7 @@ DIRS="assets"
 FILES="$PLUGIN.php index.php readme.txt options.php options-partial.php"
 
 DEV_DIRS="types"
-DEV_FILES="composer.json package.json tsconfig.json webpack.config.js"
+DEV_FILES="composer.json composer.lock package.json yarn.lock tsconfig.json webpack.config.js"
 CONFIG_FILES="babel.config.json phpcs.ruleset.xml .editorconfig .eslintignore .eslintrc.js .stylelintignore .stylelintrc.json"
 
 PREMIUM=0

@@ -5,7 +5,7 @@ Tags: gutenberg, block, google maps, map
 Requires PHP: 7.4
 Requires at least: 6.6
 Tested up to: 6.8
-Stable tag: 1.0.2
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,7 +44,7 @@ Please adhere to [these instructions](https://neliosoftware.com/blog/how-to-gene
 
 == Changelog ==
 
-= 2.0.0 =
+= 2.0.0 (August 19, 2025) =
 * Rewrite codebase with TypeScript
 * Update inner dependencies
 
@@ -63,6 +63,6 @@ Please adhere to [these instructions](https://neliosoftware.com/blog/how-to-gene
 
 == Upgrade Notice ==
 
-= 2.0.0 =
+= 2.0.0 (August 19, 2025) =
 Modernize plugin.
 

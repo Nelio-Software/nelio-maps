@@ -112,21 +112,12 @@ then
 fi
 
 
-if [ `grep "'dependencies' => array()" assets/dist/js/public.asset.php | wc -l` -ne 1 ];
+if [ `grep "'dependencies' => array()" assets/dist/blocks/google-map/view.asset.php | wc -l` -ne 1 ];
 then
 	echo " Error!"
-	echo "“Public” has a non-empty list of dependencies."
+	echo "“view.asset.php” has a non-empty list of dependencies."
 	exit 100
 fi
-
-for d in assets/src/admin/scripts/* ; do
-	if [ `grep "'dependencies' => array()" assets/dist/js/$(basename "$d").asset.php | wc -l` -ne 1 ];
-	then
-		echo " Error!"
-		echo "assets/dist/js/$(basename "$d").asset.php has a non-empty list of dependencies."
-		exit 100
-	fi
-done
 
 echo " Done!"
 
