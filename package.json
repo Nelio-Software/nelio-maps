@@ -32,12 +32,12 @@
 		"start": "wp-scripts start"
 	},
 	"devDependencies": {
-		"@react-google-maps/api": "^2.20.7",
 		"@types/lodash": "^4.17.20",
 		"@types/wordpress__block-editor": "7.0.0",
 		"@typescript-eslint/eslint-plugin": "^8.27.0",
 		"@typescript-eslint/parser": "^8.27.0",
 		"@typescript-eslint/utils": "^8.27.0",
+		"@vis.gl/react-google-maps": "^1.5.5",
 		"@wordpress/block-editor": "^13.0.7",
 		"@wordpress/blocks": "^13.0.3",
 		"@wordpress/components": "^28.0.3",

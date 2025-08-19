@@ -9,7 +9,7 @@ import { Dashicon } from '@wordpress/components';
  * External dependencies
  */
 import { clsx } from 'clsx';
-import { useJsApiLoader, Marker } from '@react-google-maps/api';
+import { APIProvider, MapProps, Marker } from '@vis.gl/react-google-maps';
 
 /**
  * Internal dependencies
@@ -25,11 +25,6 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 	const blockProps = useBlockProps();
 	const googleMapsApiKey = useGoogleMapsApiKey();
 	const optionsPageUrl = useOptionsPageUrl();
-	const { isLoaded } = useJsApiLoader( {
-		id: 'google-map-script',
-		googleMapsApiKey,
-		libraries: [ 'places' ],
-	} );
 
 	const {
 		attributes: {
@@ -47,7 +42,6 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 	} = props;
 
 	const options = {
-		disableDefaultUI: true,
 		zoomControl: false,
 		mapTypeControl: false,
 		streetViewControl: false,
@@ -56,107 +50,109 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 		styles: safeParse( customStyle ),
 	};
 
-	if ( ! isLoaded ) {
-		return <div { ...blockProps }>Loading… TODO DAVID</div>;
-	} //end if
-
 	return (
 		<div { ...blockProps }>
-			<ToolbarControls { ...props } />
+			<APIProvider apiKey={ googleMapsApiKey } libraries={ [ 'places' ] }>
+				<ToolbarControls { ...props } />
 
-			<Inspector { ...props } />
+				<Inspector { ...props } />
 
-			<section
-				className={ clsx( [
-					'nelio-maps-google-map',
-					{ 'is-api-key-missing': ! googleMapsApiKey },
-				] ) }
-			>
-				{ googleMapsApiKey ? (
-					<>
-						<MapBlock
-							zoom={ zoom }
-							height={ `${ Math.floor( height * 0.7 ) }vh` }
-							center={ numberifyCoords( { lat, lng } ) }
-							options={ options }
-							onZoomChanged={ ( value ) =>
-								setAttributes( { zoom: value } )
-							}
-							onCenterChanged={ ( _lat: string, _lng: string ) =>
-								setAttributes( {
-									lat: _lat,
-									lng: _lng,
-								} )
-							}
-						>
-							<Marker
-								position={ numberifyCoords( {
-									lat: marker.lat,
-									lng: marker.lng,
-								} ) }
-								clickable={ false }
-								opacity={ isMarkerVisible ? 1 : 0 }
-							/>
-						</MapBlock>
-
-						{ isMarkerVisible && 'none' !== addressAlignment && (
-							<div
-								className={ clsx( [
-									'address',
-									`align-${ addressAlignment }`,
-								] ) }
+				<section
+					className={ clsx( [
+						'nelio-maps-google-map',
+						{ 'is-api-key-missing': ! googleMapsApiKey },
+					] ) }
+				>
+					{ googleMapsApiKey ? (
+						<>
+							<MapBlock
+								zoom={ zoom }
+								height={ `${ Math.floor( height * 0.7 ) }vh` }
+								center={ numberifyCoords( { lat, lng } ) }
+								options={ options }
+								onZoomChanged={ ( value ) =>
+									setAttributes( { zoom: value } )
+								}
+								onCenterChanged={ (
+									_lat: string,
+									_lng: string
+								) =>
+									setAttributes( {
+										lat: _lat,
+										lng: _lng,
+									} )
+								}
 							>
-								<RichText
-									tagName="p"
-									value={ address }
-									onChange={ ( value ) =>
-										setAttributes( {
-											address: value,
-										} )
-									}
-									placeholder={ _x(
-										'Add address',
-										'user',
-										'nelio-maps'
-									) }
-									keepPlaceholderOnFocus={ true }
+								<Marker
+									position={ numberifyCoords( {
+										lat: marker.lat,
+										lng: marker.lng,
+									} ) }
+									clickable={ false }
+									opacity={ isMarkerVisible ? 1 : 0 }
 								/>
-							</div>
-						) }
-					</>
-				) : (
-					<div className="nelio-maps-google-map-placeholder">
-						<div>
-							<Dashicon icon="location-alt" />
-						</div>
-						<div className="nelio-maps-google-map-placeholder-key">
-							<p>
-								<span className="screen-reader-text">
-									{ _x( 'Error:', 'text', 'nelio-maps' ) }
-								</span>{ ' ' }
-								{ _x(
-									'Google Maps API Key Required',
-									'text',
-									'nelio-maps'
+							</MapBlock>
+
+							{ isMarkerVisible &&
+								'none' !== addressAlignment && (
+									<div
+										className={ clsx( [
+											'address',
+											`align-${ addressAlignment }`,
+										] ) }
+									>
+										<RichText
+											tagName="p"
+											value={ address }
+											onChange={ ( value ) =>
+												setAttributes( {
+													address: value,
+												} )
+											}
+											placeholder={ _x(
+												'Add address',
+												'user',
+												'nelio-maps'
+											) }
+											keepPlaceholderOnFocus={ true }
+										/>
+									</div>
 								) }
-							</p>
-							<p>
-								<a
-									href={ optionsPageUrl }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
+						</>
+					) : (
+						<div className="nelio-maps-google-map-placeholder">
+							<div>
+								<Dashicon icon="location-alt" />
+							</div>
+							<div className="nelio-maps-google-map-placeholder-key">
+								<p>
+									<span className="screen-reader-text">
+										{ _x( 'Error:', 'text', 'nelio-maps' ) }
+									</span>{ ' ' }
 									{ _x(
-										'Please add an API key in the plugin settings screen',
-										'user',
+										'Google Maps API Key Required',
+										'text',
 										'nelio-maps'
 									) }
-								</a>
-							</p>
+								</p>
+								<p>
+									<a
+										href={ optionsPageUrl }
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										{ _x(
+											'Please add an API key in the plugin settings screen',
+											'user',
+											'nelio-maps'
+										) }
+									</a>
+								</p>
+							</div>
 						</div>
-					</div>
-				) }
-			</section>
+					) }
+				</section>
+			</APIProvider>
 		</div>
 	);
 };
@@ -165,9 +161,9 @@ export const GoogleMapEdit = ( props: EditProps ): JSX.Element => {
 // HELPERS
 // =======
 
-function safeParse( json: string ): unknown {
+function safeParse( json: string ) {
 	try {
-		return JSON.parse( json );
+		return JSON.parse( json ) as MapProps[ 'styles' ];
 	} catch ( _ ) {
 		return [];
 	} //end try
