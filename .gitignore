@@ -1,5 +1,62 @@
-/build
-/node_modules
-/vendor
-/.lando
+/dist
+/includes/lib/settings/assets/js/dist
+
+wordpress*.sql.gz
+
+# Unit tests
+/tmp
+/tests/bin/tmp
+
+# Lando generated files
+.lando/wordpress
+
+# Numerous always-ignore extensions
+.diff
+.err
+.orig
+.log
+.rej
+.swo
+.swp
+.vi
+~
+.sass-cache
+
+# OS or Editor folders
+.DS_Store
+Thumbs.db
+.cache
+.project
+.settings
+.tmproj
+*.esproj
+nbproject
+*.sublime-project
+*.sublime-workspace
+.vscode
+*.swp
+package-lock.json
+
+# Dreamweaver added files
+_notes
+dwsync.xml
+
+# Komodo
+*.komodoproject
+.komodotools
+
+# Folders to ignore
+.hg
+.svn
+.CVS
+intermediate
+.idea
+node_modules
+
+# Ignore compiled stuff
 assets/dist
+.last-valid-build
+
+# Composer
+vendor
+phpstan.neon

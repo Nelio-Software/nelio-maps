@@ -1,0 +1,59 @@
+#!/bin/bash
+# shellcheck disable=SC1111
+
+print_help() {
+	echo "Usage: wp-scripts OPTION [...FILES]"
+	echo ""
+	echo "Options:"
+	echo "  format-js      Runs actual wp-script’s “format” command."
+	echo "  format-style   Runs actual wp-script’s “format” command."
+	echo "  lint-js        Runs actual wp-script’s “lint-js” command."
+	echo "  lint-style     Runs actual wp-script’s “lint-style” command."
+}
+
+if [ $# -eq 0 ]; then
+	print_help
+	exit 70
+fi
+
+COMMAND=$1
+shift
+
+FILES=("$@")
+if [ $# -eq 0 ]; then
+	if [ "$COMMAND" == "format-js" ] || [ "$COMMAND" == "lint-js" ]; then
+		# shellcheck disable=SC2207
+		FILES=($(fd -t f --ignore-file .eslintignore -E "*.d.ts" "\.[tj]sx?$"))
+	else
+		# shellcheck disable=SC2207
+		FILES=($(fd -t f --ignore-file .stylelintignore "\.scss$"))
+	fi
+fi
+
+case "$COMMAND" in
+"format-js")
+	COMMAND="format"
+	TITLE="Formatting TypeScript…"
+	;;
+"format-style")
+	COMMAND="format"
+	TITLE="Formatting CSS…"
+	;;
+"lint-js")
+	TITLE="Linting TypeScript…"
+	;;
+"lint-style")
+	TITLE="Formatting CSS…"
+	;;
+esac
+
+if command -v parallel >/dev/null 2>&1 && [ ${#FILES[@]} -gt 30 ]; then
+	JOBS=8
+	n=${#FILES[@]}
+	chunk=$(((n + JOBS - 1) / JOBS))
+	((chunk < 1)) && chunk=1
+
+	gum spin --title="${TITLE}" --show-error -- parallel --jobs "$JOBS" -N "$chunk" ./node_modules/.bin/wp-scripts "$COMMAND" ::: "${FILES[@]}"
+else
+	gum spin --title="${TITLE}" --show-error -- ./node_modules/.bin/wp-scripts "$COMMAND" "${FILES[@]}"
+fi

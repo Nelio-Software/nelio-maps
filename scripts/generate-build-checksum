@@ -1,0 +1,3 @@
+#!/bin/bash
+
+md5sum `fd -t f --ignore-file .eslintignore -E "*.d.ts" "\.[tj]sx?$|\.scss$"` | sort

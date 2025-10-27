@@ -1,5 +1,4 @@
 const attributes = {
-
 	// Map options.
 	isDraggable: {
 		type: 'boolean',
@@ -93,7 +92,6 @@ const attributes = {
 		type: 'string',
 		default: 'right',
 	},
-
 };
 
 export default attributes;

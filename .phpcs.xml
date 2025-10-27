@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress Coding Standards">
+	<description>A custom set of code standard rules to check for WordPress themes and plugins.</description>
+
+	<file>.</file>
+
+	<arg name="extensions" value="php" />
+
+	<exclude-pattern>dist</exclude-pattern>
+	<exclude-pattern>node_modules</exclude-pattern>
+	<exclude-pattern>vendor</exclude-pattern>
+	<exclude-pattern>\.lando</exclude-pattern>
+	<exclude-pattern>\.wordpress</exclude-pattern>
+
+	<!-- Basic -->
+	<rule ref="PHPCompatibility" />
+	<config name="testVersion" value="7.4-" />
+
+	<!-- Include the WordPress ruleset, with exclusions. -->
+	<rule ref="WordPress">
+		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
+		<exclude name="Generic.Functions.CallTimePassByReference" />
+
+		<exclude name="Squiz.Commenting.ClassComment.Missing" />
+		<exclude name="Squiz.Commenting.FileComment.Missing" />
+		<exclude name="Squiz.Commenting.FileComment.MissingPackageTag" />
+		<exclude name="Squiz.Commenting.FileComment.SpacingAfterComment" />
+		<exclude name="Squiz.Commenting.FileComment.SpacingAfterOpen" />
+		<exclude name="Squiz.Commenting.FileComment.WrongStyle" />
+		<exclude name="Squiz.Commenting.FunctionComment.Missing" />
+		<exclude name="Squiz.Commenting.FunctionComment.WrongStyle" />
+		<exclude name="Squiz.Commenting.FunctionCommentThrowTag.WrongNumber" />
+		<exclude name="Squiz.Commenting.VariableComment.Missing" />
+
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+		<exclude name="WordPress.Security.NonceVerification.Missing" />
+		<exclude name="WordPress.Security.NonceVerification.Recommended" />
+	</rule>
+
+	<rule ref="./vendor/automattic/vipwpcs/WordPress-VIP-Go/ruleset.xml">
+		<exclude name="WordPressVIPMinimum.JS.DangerouslySetInnerHTML" />
+		<exclude name="WordPressVIPMinimum.JS.HTMLExecutingFunctions" />
+		<exclude name="WordPressVIPMinimum.JS.InnerHTML" />
+		<exclude name="WordPressVIPMinimum.JS.StringConcat" />
+		<exclude name="WordPressVIPMinimum.JS.StrippingTags" />
+		<exclude name="WordPressVIPMinimum.JS.Window" />
+
+		<exclude name="WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__HTTP_USER_AGENT__" />
+		<exclude name="WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___COOKIE" />
+	</rule>
+
+	<!-- Restore some WordPress exclusions -->
+	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
+		<exclude-pattern>php-stubs/*</exclude-pattern>
+		<severity>5</severity>
+	</rule>
+
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>phpstan.dynamic.neon.php</exclude-pattern>
+	</rule>
+
+	<!--
+	Prevent errors caused by WordPress Coding Standards not supporting PHP 8.0+.
+	See https://github.com/WordPress/WordPress-Coding-Standards/issues/2035
+	-->
+	<ini name="error_reporting" value="E_ALL &#38; ~E_DEPRECATED" />
+
+	<!-- Prevent warnings in stubs -->
+	<rule ref="Generic.Files.OneObjectStructurePerFile.MultipleFound">
+		<exclude-pattern>php-stubs/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.FunctionComment.InvalidNoReturn">
+		<exclude-pattern>php-stubs/*</exclude-pattern>
+	</rule>
+	<rule ref="Universal.Namespaces.DisallowCurlyBraceSyntax.Forbidden">
+		<exclude-pattern>php-stubs/*</exclude-pattern>
+	</rule>
+	<rule ref="Universal.Namespaces.OneDeclarationPerFile.MultipleFound">
+		<exclude-pattern>php-stubs/*</exclude-pattern>
+	</rule>
+
+	<!-- Custom capabilities -->
+	<rule ref="WordPress.WP.Capabilities">
+		<properties>
+			<property name="custom_capabilities" type="array">
+				<element value="edit_nab_experiments" />
+				<element value="delete_nab_experiments" />
+				<element value="start_nab_experiments" />
+				<element value="stop_nab_experiments" />
+				<element value="pause_nab_experiments" />
+				<element value="resume_nab_experiments" />
+				<element value="read_nab_results" />
+				<element value="manage_nab_account" />
+				<element value="manage_nab_options" />
+			</property>
+		</properties>
+	</rule>
+
+</ruleset>

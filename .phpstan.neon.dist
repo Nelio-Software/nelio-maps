@@ -1,0 +1,38 @@
+includes:
+	- vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+	level: 1
+
+	paths:
+		- nelio-maps.php
+		- class-nelio-maps.php
+		- assets
+
+	bootstrapFiles:
+		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
+		- php-stubs/nelio-maps.php
+
+	reportUnmatchedIgnoredErrors: false
+	ignoreErrors:
+		- '#Call to an undefined method WC_Session::has_session\(\).#'
+		- '#Parameter \#1 \$callback of function array_map expects .callable.mixed.: mixed..null, .absint. given.#'
+		- '#Parameter \#1 \$str of function sanitize_text_field expects string, mixed given.#'
+		- '#Parameter \#1 \$maybeint of function absint expects array.bool.float.int.resource.string.null, mixed given.#'
+		- '#Parameter \#1 \$text of function esc_attr expects string, int given.#'
+		- '#Parameter \#1 \$text of function esc_html expects string, float.int given.#'
+		- '#Parameter \#1 \$text of function esc_html expects string, float given.#'
+		- '#Parameter \#1 \$text of function esc_html expects string, int given.#'
+		- '#Property WooCommerce::\$session \(WC_Session\) in empty\(\) is not falsy.#'
+		-
+			identifier: constructor.unusedParameter
+			paths:
+				- php-stubs/*
+		-
+			identifier: return.missing
+			paths:
+				- php-stubs/*
+		-
+			identifier: throws.notThrowable
+			paths:
+				- php-stubs/*

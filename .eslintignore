@@ -3,9 +3,12 @@
 webpack.config.js
 
 assets/src/admin/scripts/heatmap-renderer/lib
+includes/hooks/woocommerce/experiments/product/editor/assets/product-gallery-metabox/index.js
+includes/lib/settings/assets/js/src/settings.ts
+scripts/sync-package-json.js
+
 dist
 node_modules
 vendor
 postcss.config.js
 test/unit/jest.config.js
-includes/hooks/woocommerce/experiments/product/editor/assets/product-gallery-metabox/index.js

@@ -1,0 +1,32 @@
+plugin:
+    name: nelio-maps
+    premium: false
+
+build:
+    tag:
+        dirs:
+            - assets
+        files:
+            - index.php
+            - options-partial.php
+            - options.php
+            - readme.txt
+    dev:
+        dirs:
+            - types
+        files:
+            - composer.json
+            - composer.lock
+            - package.json
+            - tsconfig.json
+            - webpack.config.js
+            - yarn.lock
+        config:
+            - .editorconfig
+            - .eslintignore
+            - .eslintrc.js
+            - .phpcs.xml
+            - .phpstan.neon.dist
+            - .stylelintignore
+            - .stylelintrc.json
+            - babel.config.json

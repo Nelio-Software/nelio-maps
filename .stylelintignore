@@ -8,4 +8,6 @@
 *.tsx
 
 assets/dist
+includes/lib/settings/assets/js/dist/
 vendor
+packages/components/contextual-help/walkthrough/introjs.scss

@@ -24,12 +24,17 @@
 	"prettier": "@wordpress/prettier-config",
 	"scripts": {
 		"build": "wp-scripts build",
-		"format": "wp-scripts format assets/src",
-		"lint:css": "wp-scripts lint-style",
-		"lint:js": "wp-scripts lint-js",
-		"lint:php": "composer lint",
-		"lint:pkg-json": "wp-scripts lint-pkg-json",
-		"start": "wp-scripts start"
+		"format": "yarn run format:css && yarn run format:js && yarn run format:php",
+		"format:css": "./scripts/format-css",
+		"format:js": "./scripts/wp-scripts format-js",
+		"format:php": "./scripts/format-php",
+		"lint": "yarn run lint:css && yarn run lint:js && yarn run lint:php",
+		"lint:css": "./scripts/wp-scripts lint-style",
+		"lint:js": "./scripts/lint-js",
+		"lint:php": "./scripts/lint-php",
+		"start": "wp-scripts start",
+		"tasks": "ag --recurse --word --noheading --nobreak --ignore={'node_modules','vendor','dist','.lando','package.json'} \"TODO|FIXME|BUG|NOTE|HACK|XXX|INFO|OPTIMIZE|REVIEW|DEPRECATED|WARNING|PERF|DEBUG|DOC\"",
+		"postinstall": "touch node_modules/.metadata_never_index && rm -f .git/hooks/pre-commit && ln -s ../../scripts/pre-commit.sh .git/hooks/pre-commit"
 	},
 	"devDependencies": {
 		"@types/lodash": "^4.17.20",

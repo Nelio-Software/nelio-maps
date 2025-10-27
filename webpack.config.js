@@ -4,6 +4,7 @@
 const _ = require( 'lodash' );
 const fs = require( 'fs' );
 const path = require( 'path' );
+const { exec } = require( 'child_process' );
 const ForkTsCheckerWebpackPlugin = require( 'fork-ts-checker-webpack-plugin' );
 const CopyWebpackPlugin = require( 'copy-webpack-plugin' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' ).default
@@ -14,6 +15,24 @@ const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' ).default
  * WordPress dependencies
  */
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
+
+// =======
+// PLUGINS
+// =======
+
+class ValidChecksumGenerator {
+	apply( compiler ) {
+		compiler.hooks.done.tap( 'RunScriptAfterEmitPlugin', ( stats ) => {
+			if ( stats.hasErrors() ) {
+				return;
+			}
+			const child = exec( 'bash "./scripts/generate-build-checksum"' );
+			child.stdout.pipe( fs.createWriteStream( '.last-valid-build' ) );
+			console.log( 'EA' );
+			console.log( child.stderr );
+		} );
+	}
+}
 
 // ======
 // CONFIG
@@ -57,6 +76,7 @@ const config = {
 				},
 			],
 		} ),
+		new ValidChecksumGenerator(),
 	].filter( /* if plugin exists */ ( x ) => !! x ),
 	watchOptions: {
 		ignored: /node_modules|^((?!(assets.src)).)*$/,
