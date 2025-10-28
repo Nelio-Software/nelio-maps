@@ -26,7 +26,7 @@
 		"build": "./scripts/build",
 		"format": "yarn run -s format:css && yarn run -s format:js && yarn run -s format:php",
 		"format:css": "./scripts/common/format-css",
-		"format:js": "./scripts/wp-scripts format-js",
+		"format:js": "./scripts/common/wp-scripts format-js",
 		"format:php": "./scripts/common/format-php",
 		"lint": "yarn run -s lint:css && yarn run -s lint:js && yarn run -s lint:php",
 		"lint:css": "./scripts/common/wp-scripts lint-style",
