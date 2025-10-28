@@ -1,0 +1,20 @@
+#!/bin/bash
+
+FILES=("$@")
+
+PHPCS_FILES=("${FILES[@]}")
+if [ ${#FILES[@]} -eq 0 ]; then
+	# shellcheck disable=SC2207
+	PHPCS_FILES=($(fd -t f -E scripts/ -E php-stubs/ "\.php$|\.html$"))
+fi
+
+gum spin --title="Installing composer deps…" --show-error -- composer install
+
+if ! gum spin --title="Running phpcs…" --show-error -- ./vendor/bin/phpcs --parallel=16 --standard=.phpcs.xml --report-summary --report-source "${PHPCS_FILES[@]}"; then
+	exit 60
+fi
+
+gum spin --title="Cleaning phpstan cache…" -- ./vendor/bin/phpstan clear-result-cache
+if ! gum spin --title="Running phpstan…" --show-error -- ./vendor/bin/phpstan analyse "${FILES[@]}"; then
+	exit 61
+fi

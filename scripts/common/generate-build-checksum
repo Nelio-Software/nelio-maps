@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# shellcheck disable=SC2046
+md5sum $(fd -t f --ignore-file .eslintignore -E "*.d.ts" "\.[tj]sx?$|\.scss$") \
+	package.json \
+	yarn.lock \
+	webpack.config.js |
+	sort

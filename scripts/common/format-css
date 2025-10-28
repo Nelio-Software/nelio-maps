@@ -1,0 +1,11 @@
+#!/bin/bash
+# shellcheck disable=SC2207
+
+FILES=("$@")
+if [ $# -eq 0 ]; then
+	FILES=($(fd -t f "\.scss$"))
+fi
+
+# shellcheck disable=SC2086
+"$(dirname $0)"/wp-scripts format-style "${FILES[@]}" &&
+	gum spin --title="Formatting…" --show-error -- stylelint --fix "${FILES[@]}"
