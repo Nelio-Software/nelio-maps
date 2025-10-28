@@ -9,32 +9,63 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Nelio_Maps {
 
-	private static $instance = null;
+	/**
+	 * This instance.
+	 *
+	 * @var Nelio_Maps|null
+	 */
+	private static $instance;
 
+	/**
+	 * Plugin path.
+	 *
+	 * @var string
+	 */
 	public $plugin_path;
+
+	/**
+	 * Plugin URL.
+	 *
+	 * @var string
+	 */
 	public $plugin_url;
 
+	/**
+	 * Returns this instance.
+	 *
+	 * @return Nelio_Maps
+	 */
 	public static function instance() {
 
 		if ( is_null( self::$instance ) ) {
 			self::$instance = new self();
-			self::$instance->init_options();
+			self::$instance->init();
 			self::$instance->init_hooks();
 		}//end if
 
 		return self::$instance;
 	}//end instance()
 
-	public function init_options() {
+	/**
+	 * Initializes instance.
+	 *
+	 * @return void
+	 */
+	private function init() {
 
 		$this->plugin_path = untrailingslashit( plugin_dir_path( __FILE__ ) );
 		$this->plugin_url  = untrailingslashit( plugin_dir_url( __FILE__ ) );
 
 		// load textdomain.
 		load_plugin_textdomain( 'nelio-maps' );
-	}//end init_options()
+	}//end init()
 
-	public function init_hooks() {
+	/**
+	 * Hooks into WordPress.
+	 *
+	 * @return void
+	 */
+	private function init_hooks() {
 
 		if ( ! function_exists( 'register_block_type' ) ) {
 			return;
@@ -51,6 +82,11 @@ class Nelio_Maps {
 		}//end if
 	}//end init_hooks()
 
+	/**
+	 * Callback to register block types.
+	 *
+	 * @return void
+	 */
 	public function register_block_types() {
 		$blocks = array( 'google-map' );
 		foreach ( $blocks as $block ) {
@@ -60,6 +96,11 @@ class Nelio_Maps {
 		}//end foreach
 	}//end register_block_types()
 
+	/**
+	 * Callback to register script dependencies.
+	 *
+	 * @return void
+	 */
 	public function register_script_dependencies() {
 		$plugin_version = get_file_data( __FILE__, array( 'Version' ), 'plugin' )[0];
 		wp_register_script(
@@ -77,6 +118,11 @@ class Nelio_Maps {
 		);
 	}//end register_script_dependencies()
 
+	/**
+	 * Callback to register admin script dependencies.
+	 *
+	 * @return void
+	 */
 	public function register_admin_script_dependencies() {
 		$settings = array(
 			'googleMapsApiKey' => get_option( 'nelio_maps_api_key_option', '' ),
@@ -90,6 +136,13 @@ class Nelio_Maps {
 		);
 	}//end register_admin_script_dependencies()
 
+	/**
+	 * Callback to add the “extra” category.
+	 *
+	 * @param list<array{slug:string,title:string}> $categories Categories.
+	 *
+	 * @return list<array{slug:string,title:string}> $categories
+	 */
 	public function add_extra_category( $categories ) {
 
 		if ( count(
@@ -113,6 +166,11 @@ class Nelio_Maps {
 		);
 	}//end add_extra_category()
 
+	/**
+	 * Callback to register google maps API key option.
+	 *
+	 * @return void
+	 */
 	public function register_google_maps_api_key_option() {
 		$api_key = get_option( 'nelio_maps_api_key_option', '' );
 		update_option( 'nelio_maps_api_key_option', $api_key );

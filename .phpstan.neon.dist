@@ -2,11 +2,13 @@ includes:
 	- vendor/szepeviktor/phpstan-wordpress/extension.neon
 
 parameters:
-	level: 1
+	level: 10
 
 	paths:
 		- nelio-maps.php
 		- class-nelio-maps.php
+		- options.php
+		- options-partial.php
 		- assets
 
 	bootstrapFiles:

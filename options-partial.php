@@ -3,9 +3,7 @@
  * Displays the UI for the Nelio Maps Page.
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}//end if
+defined( 'ABSPATH' ) || exit;
 
 ?>
 
