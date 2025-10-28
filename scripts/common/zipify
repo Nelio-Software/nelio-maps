@@ -131,9 +131,9 @@ fi
 version=$(cat "${PLUGIN}.php" | grep -F "* Version" | sed -e "s/ //g" | cut -d: -f2)
 rm -f "/tmp/${PLUGIN}.${version}.zip" >/dev/null 2>&1
 pushd "/tmp/${PLUGIN}" >/dev/null 2>&1 || exit
-gun spin --title="Creating zip file…" --show-error -- zip -r "/tmp/${PLUGIN}.${version}.zip" "${PLUGIN}" >/dev/null 2>&1
+gum spin --title="Creating zip file…" --show-error -- zip -r "/tmp/${PLUGIN}.${version}.zip" "${PLUGIN}"
 popd >/dev/null 2>&1 || exit
 
 # RECOVER STATE
-gun spin --title="Restoring PHP dependencies…" --show-error -- composer install >/dev/null 2>&1
+gum spin --title="Restoring PHP dependencies…" --show-error -- composer install
 exit 0
