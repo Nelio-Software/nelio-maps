@@ -3,6 +3,7 @@
  */
 const _ = require( 'lodash' );
 const fs = require( 'fs' );
+const os = require( 'os' );
 const path = require( 'path' );
 const { exec } = require( 'child_process' );
 const ForkTsCheckerWebpackPlugin = require( 'fork-ts-checker-webpack-plugin' );
@@ -26,10 +27,9 @@ class ValidChecksumGenerator {
 			if ( stats.hasErrors() ) {
 				return;
 			}
-			const child = exec( 'bash "./scripts/generate-build-checksum"' );
-			child.stdout.pipe( fs.createWriteStream( '.last-valid-build' ) );
-			console.log( 'EA' );
-			console.log( child.stderr );
+			exec(
+				`${ os.homedir() }/.local/bin/nelio-checksum --generate-js-build`
+			);
 		} );
 	}
 }

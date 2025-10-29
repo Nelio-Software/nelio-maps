@@ -55,7 +55,7 @@ node_modules
 
 # Ignore compiled stuff
 assets/dist
-.last-valid-build
+.nelio-checksums
 
 # Composer
 vendor
