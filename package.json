@@ -35,8 +35,8 @@
 		"start": "wp-scripts start",
 		"tasks": "ag --recurse --word --noheading --nobreak --ignore={'node_modules','vendor','dist','.lando','package.json'} \"TODO|FIXME|BUG|NOTE|HACK|XXX|INFO|OPTIMIZE|REVIEW|DEPRECATED|WARNING|PERF|DEBUG|DOC\"",
 		"postinstall": "touch node_modules/.metadata_never_index && rm -f .git/hooks/pre-commit && ln -s ~/.local/bin/nelio-pre-commit .git/hooks/pre-commit",
-		"release": "./scripts/common/mkver",
-		"zipify": "./scripts/common/zipify"
+		"release": "nelio-svn-publish",
+		"zipify": "nelio-zipify"
 	},
 	"devDependencies": {
 		"@types/lodash": "^4.17.20",

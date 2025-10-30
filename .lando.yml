@@ -1,4 +1,4 @@
 name: nelio-maps
 recipe: wordpress
 config:
-  webroot: .lando/wordpress
+    webroot: .lando/wordpress

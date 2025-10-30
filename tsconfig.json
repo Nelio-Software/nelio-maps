@@ -2,10 +2,7 @@
 	"compilerOptions": {
 		"baseUrl": "./",
 		"jsx": "react-jsx",
-		"lib": [
-			"es2021",
-			"dom"
-		],
+		"lib": [ "es2021", "dom" ],
 		"module": "esnext",
 		"moduleResolution": "node",
 		"outDir": "dist",
@@ -29,19 +26,10 @@
 		"strictFunctionTypes": true,
 		"strictNullChecks": true,
 		"target": "es2015",
-		"typeRoots": [
-			"node_modules/@types",
-			"types"
-		],
+		"typeRoots": [ "node_modules/@types", "types" ]
 	},
-	"include": [
-		"assets/src",
-		"packages",
-		"types"
-	],
-	"exclude": [
-		"node_modules"
-	],
+	"include": [ "assets/src", "packages", "types" ],
+	"exclude": [ "node_modules" ],
 	"compileOnSave": false,
 	"buildOnSave": false
 }
