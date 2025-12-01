@@ -10,7 +10,9 @@ build:
             - index.php
             - options-partial.php
             - options.php
-            - readme.txt # TODO David: faltan archivos para que el zip funcione
+            - nelio-maps.php
+            - class-nelio-maps.php
+            - readme.txt
     dev:
         dirs:
             - types
