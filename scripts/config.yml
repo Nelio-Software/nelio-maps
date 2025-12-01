@@ -10,7 +10,7 @@ build:
             - index.php
             - options-partial.php
             - options.php
-            - readme.txt
+            - readme.txt # TODO David: faltan archivos para que el zip funcione
     dev:
         dirs:
             - types

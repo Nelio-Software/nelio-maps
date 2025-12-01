@@ -26,6 +26,7 @@
 defined( 'ABSPATH' ) || exit;
 
 define( 'NELIO_MAPS', true );
+require untrailingslashit( __DIR__ ) . '/class-nelio-maps.php';
 
 /**
  * Returns the unique instance of Nelio Map’s main class.
