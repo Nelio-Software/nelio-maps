@@ -69,7 +69,7 @@ export const MapBlock = ( {
 
 	return (
 		<Map
-			style={ { height } }
+			style={ { height, overflowY: 'hidden' } }
 			zoom={ zoom }
 			center={ center }
 			onZoomChanged={ ( event ) => {

@@ -15,6 +15,9 @@ parameters:
 		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
 		- php-stubs/nelio-maps.php
 
+	excludePaths:
+		- php-stubs/nelio-maps.php
+
 	reportUnmatchedIgnoredErrors: false
 	ignoreErrors:
 		- '#Call to an undefined method WC_Session::has_session\(\).#'

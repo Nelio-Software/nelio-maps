@@ -16,7 +16,7 @@
 	<rule ref="PHPCompatibility" />
 	<config name="testVersion" value="7.4-" />
 
-	<!-- Include the WordPress ruleset, with exclusions. -->
+	<!-- Include the WordPress ruleset, with exclusions -->
 	<rule ref="WordPress">
 		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
 		<exclude name="Generic.Functions.CallTimePassByReference" />
@@ -31,12 +31,9 @@
 		<exclude name="Squiz.Commenting.FunctionComment.WrongStyle" />
 		<exclude name="Squiz.Commenting.FunctionCommentThrowTag.WrongNumber" />
 		<exclude name="Squiz.Commenting.VariableComment.Missing" />
-
-		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
-		<exclude name="WordPress.Security.NonceVerification.Missing" />
-		<exclude name="WordPress.Security.NonceVerification.Recommended" />
 	</rule>
 
+	<!-- Include WordPress VIP ruleset, with exclusions -->
 	<rule ref="./vendor/automattic/vipwpcs/WordPress-VIP-Go/ruleset.xml">
 		<exclude name="WordPressVIPMinimum.JS.DangerouslySetInnerHTML" />
 		<exclude name="WordPressVIPMinimum.JS.HTMLExecutingFunctions" />
@@ -49,23 +46,66 @@
 		<exclude name="WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___COOKIE" />
 	</rule>
 
-	<!-- Restore some WordPress exclusions -->
-	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
-		<exclude-pattern>php-stubs/*</exclude-pattern>
+	<!-- Add missing checks from Plugin Check -->
+	<rule ref="Generic.PHP.ForbiddenFunctions">
+		<properties>
+			<property name="forbiddenFunctions" type="array">
+				<element key="move_uploaded_file" value="null"/>
+				<element key="passthru" value="null"/>
+				<element key="proc_open" value="null"/>
+				<element key="create_function" value="null"/>
+				<element key="eval" value="null"/>
+				<element key="str_rot13" value="null"/>
+			</property>
+		</properties>
+		<type>error</type>
+		<severity>7</severity>
+	</rule>
+
+	<rule ref="Squiz.PHP.DiscouragedFunctions">
+		<properties>
+			<property name="forbiddenFunctions" type="array">
+				<element key="set_time_limit" value="null"/>
+				<element key="ini_set" value="null"/>
+				<element key="ini_alter" value="null"/>
+				<element key="dl" value="null"/>
+			</property>
+		</properties>
+	</rule>
+	<rule ref="WordPress.Security.ValidatedSanitizedInput.MissingUnslash">
+		<type>warning</type>
 		<severity>5</severity>
 	</rule>
 
-	<rule ref="WordPress.Files.FileName">
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="nelio-maps"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="nelio_maps"/>
+			</property>
+		</properties>
 		<exclude-pattern>phpstan.dynamic.neon.php</exclude-pattern>
 	</rule>
 
-	<!--
-	Prevent errors caused by WordPress Coding Standards not supporting PHP 8.0+.
-	See https://github.com/WordPress/WordPress-Coding-Standards/issues/2035
-	-->
-	<ini name="error_reporting" value="E_ALL &#38; ~E_DEPRECATED" />
+	<rule ref="WordPress.DB.SlowDBQuery.slow_db_query_meta_key">
+		<type>warning</type>
+		<severity>5</severity>
+	</rule>
 
-	<!-- Prevent warnings in stubs -->
+	<!-- Prevent warnings on some files/folders -->
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>phpstan.dynamic.neon.php</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
+		<exclude-pattern>php-stubs/*</exclude-pattern>
+	</rule>
 	<rule ref="Generic.Files.OneObjectStructurePerFile.MultipleFound">
 		<exclude-pattern>php-stubs/*</exclude-pattern>
 	</rule>
@@ -77,23 +117,6 @@
 	</rule>
 	<rule ref="Universal.Namespaces.OneDeclarationPerFile.MultipleFound">
 		<exclude-pattern>php-stubs/*</exclude-pattern>
-	</rule>
-
-	<!-- Custom capabilities -->
-	<rule ref="WordPress.WP.Capabilities">
-		<properties>
-			<property name="custom_capabilities" type="array">
-				<element value="edit_nab_experiments" />
-				<element value="delete_nab_experiments" />
-				<element value="start_nab_experiments" />
-				<element value="stop_nab_experiments" />
-				<element value="pause_nab_experiments" />
-				<element value="resume_nab_experiments" />
-				<element value="read_nab_results" />
-				<element value="manage_nab_account" />
-				<element value="manage_nab_options" />
-			</property>
-		</properties>
 	</rule>
 
 </ruleset>

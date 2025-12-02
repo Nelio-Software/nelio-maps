@@ -38,7 +38,7 @@ function nelio_maps_settings_init() {
 
 	add_settings_section(
 		'nelio_maps_general',
-		_x( 'General', 'text', 'nelio_maps' ),
+		_x( 'General', 'text', 'nelio-maps' ),
 		'__return_null',
 		'nelio_maps'
 	);
@@ -65,8 +65,21 @@ function nelio_maps_render_api_key_input_field() {
 	$option       = is_string( $option ) ? $option : '';
 
 	printf(
-		'<input type="text" name="%s" value="%s" size="60" />',
+		'<input type="text" name="%s" value="%s" size="60" /><p><span class="description">%s</span></p>',
 		esc_attr( $setting_name ),
-		esc_attr( $option )
+		esc_attr( $option ),
+		wp_kses(
+			str_replace(
+				'<a>',
+				sprintf( '<a href="%s" target="_blank">', esc_url( 'https://neliosoftware.com/blog/how-to-generate-an-api-key-for-google-translate/' ) ),
+				_x( 'Please adhere to <a>these instructions</a> to generate the Google Maps API Key you’ll need to use Nelio Maps.', 'user', 'nelio-maps' ),
+			),
+			array(
+				'a' => array(
+					'href'   => true,
+					'target' => true,
+				),
+			)
+		)
 	);
 }//end nelio_maps_render_api_key_input_field()

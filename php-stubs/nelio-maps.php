@@ -11,4 +11,4 @@ require 'class-nelio-maps.php';
  *
  * @since 1.0.0
  */
-function nelioab() {}
+function nelio_maps() {}

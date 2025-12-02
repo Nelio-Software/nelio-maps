@@ -2,3 +2,6 @@ name: nelio-maps
 recipe: wordpress
 config:
     webroot: .lando/wordpress
+services:
+    phpmyadmin:
+        type: phpmyadmin
