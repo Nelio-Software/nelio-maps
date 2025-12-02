@@ -75,6 +75,7 @@ function extractMapOptions( el: HTMLElement ) {
 		clickableIcons: isDraggable,
 		draggableCursor: ! isDraggable ? 'default' : undefined,
 		disableDefaultUI: true,
+		keyboardShortcuts: isDraggable,
 		fullscreenControl: showFullscreenButton,
 		gestureHandling: isDraggable ? 'cooperative' : 'none',
 		mapTypeControl: showMapTypeButton,

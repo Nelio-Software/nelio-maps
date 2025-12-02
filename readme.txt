@@ -47,6 +47,7 @@ Please adhere to [these instructions](https://neliosoftware.com/blog/how-to-gene
 = 2.0.1 =
 * Update coding standards.
 * Update block to API version 3.
+* Disable keyboard interaction if map is not draggable.
 
 = 2.0.0 (August 19, 2025) =
 * Rewrite codebase with TypeScript
