@@ -44,7 +44,7 @@ Please adhere to [these instructions](https://neliosoftware.com/blog/how-to-gene
 
 == Changelog ==
 
-= 2.0.1 =
+= 2.0.1 (December 2, 2025) =
 * Update coding standards.
 * Update block to API version 3.
 * Disable keyboard interaction if map is not draggable.
@@ -68,6 +68,6 @@ Please adhere to [these instructions](https://neliosoftware.com/blog/how-to-gene
 
 == Upgrade Notice ==
 
-= 2.0.1 =
+= 2.0.1 (December 2, 2025) =
 Modernize plugin.
 
