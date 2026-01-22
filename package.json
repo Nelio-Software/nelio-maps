@@ -59,7 +59,7 @@
 		"copy-webpack-plugin": "^13.0.1",
 		"eslint-import-resolver-typescript": "^4.4.4",
 		"fork-ts-checker-webpack-plugin": "^9.0.2",
-		"lodash": "^4.17.21",
+		"lodash": "^4.17.23",
 		"mini-css-extract-plugin": "^2.9.4",
 		"prettier": "npm:wp-prettier@latest",
 		"typescript": "^5.8.2"
