@@ -52,6 +52,7 @@ dwsync.xml
 intermediate
 .idea
 node_modules
+.yarn
 
 # Ignore compiled stuff
 assets/dist
