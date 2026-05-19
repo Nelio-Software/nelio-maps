@@ -108,6 +108,7 @@ export const Inspector = ( {
 				{ isMarkerVisible && (
 					<>
 						<AddressSearch
+							className="nelio-maps-google-map-address-search"
 							placeholder={ _x(
 								'Search location',
 								'user',

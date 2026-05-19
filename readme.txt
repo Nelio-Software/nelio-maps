@@ -4,8 +4,8 @@ Donate Link: https://neliosoftware.com/
 Tags: gutenberg, block, google maps, map
 Requires PHP: 7.4
 Requires at least: 6.6
-Tested up to: 6.9
-Stable tag: 2.0.1
+Tested up to: 7.0
+Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,9 @@ Please adhere to [these instructions](https://neliosoftware.com/blog/how-to-gene
 
 == Changelog ==
 
+= 2.0.2 (May 19, 2026) =
+* Add compatibility with WordPress 7.0.
+
 = 2.0.1 (December 2, 2025) =
 * Update coding standards.
 * Update block to API version 3.
@@ -68,6 +71,6 @@ Please adhere to [these instructions](https://neliosoftware.com/blog/how-to-gene
 
 == Upgrade Notice ==
 
-= 2.0.1 (December 2, 2025) =
-Modernize plugin.
+= 2.0.2 (May 19, 2026) =
+Add compatibility with WordPress 7.0.
 

@@ -6,7 +6,7 @@
  * Plugin Name:       Nelio Maps
  * Plugin URI:        https://neliosoftware.com
  * Description:       Simple and beautiful Google Maps block for WordPress.
- * Version:           2.0.1
+ * Version:           2.0.2
  *
  * Author:            Nelio Software
  * Author URI:        http://neliosoftware.com
